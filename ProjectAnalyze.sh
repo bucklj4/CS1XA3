@@ -1,5 +1,9 @@
 #!/bin/bash
 
+BRED="\e[41m"
+BBLUE="\e[44m"
+NORM="\e[0m"
+
 # Question 1
 
 # Gather commits from remote repo
@@ -12,9 +16,9 @@ echo ${remoteRepo}
 
 if [ ${localRepo} = ${remoteRepo} ]
 then
-	echo "The local repo is up to date with the remote repo."
+	echo -e "${BBLUE}The local repo is up to date with the remote repo.${NORM}"
 else
-	echo "The local repo is NOT up to date with the local repo."
+	echo -e "${BRED}The local repo is NOT up to date with the local repo.${NORM}"
 fi
 
 # Question 2
@@ -25,4 +29,4 @@ fi
 (grep -r -h "#TODO" --exclude="ProjectAnalyze.sh" --exclude="changes.log" --exclude="todo.log" .) > todo.log
 
 # Question 4
-(find -name "*.hs" | xargs -I {} sh -c "printf 'Errors for {}:\n\n'; ghc -fno-code {}; echo; echo '--------------------'; echo;") &> error.log
+(find -name "*.hs" | xargs -I {} sh -c "printf 'Errors for the Haskell file: '; readlink -f {}; printf '\n\n'; ghc -fno-code {}; echo; echo '--------------------'; echo;") &> error.log
