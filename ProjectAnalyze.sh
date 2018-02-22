@@ -19,7 +19,10 @@ fi
 
 # Question 2
 
-(git diff) >> changes.log
+(git diff) > changes.log
 
 # Question 3
-(grep -r -h "#TODO" --exclude="ProjectAnalyze.sh" --exclude="changes.log" --exclude="todo.log" .) >> todo.log
+(grep -r -h "#TODO" --exclude="ProjectAnalyze.sh" --exclude="changes.log" --exclude="todo.log" .) > todo.log
+
+# Question 4
+(find -name "*.hs" | xargs -I {} sh -c "printf 'Errors for {}:\n\n'; ghc -fno-code {}; echo; echo '--------------------'; echo;") &> error.log
