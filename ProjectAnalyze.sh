@@ -46,6 +46,9 @@ echo "todo.log created."
 
 # Question 4
 
+# Adds 'main = undefined' to any Haskell files which lack this line to avoid Main is not defined error.
+find -name "*.hs" | xargs -I {} grep -l -L "main = undefined" {} | xargs -I{} sh -c "(echo 'main = undefined') >> {}"
+
 # Returns the errors of all Haskell files in the project (and paths to the erroneous files) and puts them in a file
 (find -name "*.hs" | xargs -I {} sh -c "printf '${NORM}${BRED}Errors for the Haskell file: '; readlink -f {}; printf '${NORM}${REV}\n\n${NORM}${BRED}'; ghc -fno-code {}; echo -e '${NORM}${REV}'; echo;") &> error.log
 echo "error.log created."
