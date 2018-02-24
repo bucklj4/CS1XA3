@@ -76,9 +76,42 @@ do
 		break
 	elif [ ${response} = "N" ] || [ ${response} = "n" ]
 	then
-		echo "Thanks for using the Project Analyzer."
 		break
 	else
 		echo -e "${BRED}Please enter either Y for yes or N for no.${NORM}"
 	fi
+done
+
+# Question 6
+
+# A New Hope!
+echo "You should take a break! Do you want to watch ASCII Star Wars? (Y/N)"
+while read response;
+do
+if [ ${response} = "Y" ] || [ ${response} = "y" ]
+        then
+                python  sw/ascii_telnet_server.py --stdout -f sw/sample_movies/sw1.txt	
+                break
+        elif [ ${response} = "N" ] || [ ${response} = "n" ]
+        then
+                break
+        else
+                echo -e "${BRED}Please enter either Y for yes or N for no.${NORM}"
+        fi
+done
+
+echo "How about an ASCII Rick Roll? (Y/N)"
+while read response;
+do
+if [ ${response} = "Y" ] || [ ${response} = "y" ]
+        then
+                python  sw/ascii_telnet_server.py --stdout -f sw/sample_movies/rick_roll.txt
+                break
+        elif [ ${response} = "N" ] || [ ${response} = "n" ]
+        then
+                echo "Thanks for using the Project Analyzer."
+                break
+        else
+                echo -e "${BRED}Please enter either Y for yes or N for no.${NORM}"
+        fi
 done
