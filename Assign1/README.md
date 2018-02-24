@@ -10,7 +10,7 @@ This part of the script puts all the uncommitted changes of the project in a fil
 This part of the script returns a file called todo.log that contains all of the lines in the project's source files where the tag #TODO appears. It ignores the changes.log file (could raise duplicates of the same #TODO lines) and the ProjectAnalyze.sh script itself.
 
 ### Question 4 ###
-This part of the script adds 'main = undefined' to any Haskell files which do not already contain this line to ensure even plain, non-module Haskell files are checked. Then, it checks all Haskell files for errors and returns them in a file called error.log
+This part of the script adds 'main = undefined' to any Haskell files which do not already contain this line to ensure even plain, non-module Haskell files are checked. Then, it checks all Haskell files for errors and returns them in a file called error.log.
 
 ### Question 5 (Bonus Feature) ###
 This part of the script asks the user if they want a print-out of the three created files, and should they please, it prints them out.
