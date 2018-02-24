@@ -21,6 +21,9 @@ This part of the script asks the user if they want to watch ASCII Star Wars, and
 ### Credits ###
 
 Running multiple commands on same xargs argument: https://stackoverflow.com/questions/6958689/xargs-with-multiple-commands-as-argument
+
 Bash coloured text using ANSI escape codes: https://misc.flogisoft.com/bash/tip_colors_and_formatting
+
 ASCII Star Wars using Telnet (Requires Internet connection, so unable to use on Mills server): https://askubuntu.com/questions/699159/ascii-animations-that-are-viewed-in-the-command-line
+
 ASCII Star Wars + Rick Roll using Python script that starts local server: https://github.com/nitram509/ascii-telnet-server
