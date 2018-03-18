@@ -1,0 +1,17 @@
+<html>
+<head></head>
+<body>
+	<canvas id="gameCanvas" style="height:100%; width:100%"></canvas>
+	<script>
+		var can = document.getElementById('gameCanvas');
+		var ctx = can.getContext('2d');
+
+		//ctx.arc(x,y,radius,startAngle,endAngle, anticlockwise);  
+
+		ctx.beginPath()
+		ctx.arc(100,100,100,0,Math.PI*2, false); // outer (filled)
+		ctx.arc(100,100,55,0,Math.PI*2, true); // outer (unfills it)
+		ctx.fill();
+	</script>
+</body>
+</html>
