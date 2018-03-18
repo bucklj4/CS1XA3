@@ -3,7 +3,7 @@ port module App exposing (..)
 import Html exposing (..)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (style, id)
-import Svg exposing (svg, ellipse, line)
+import Svg exposing (svg, ellipse, line, rect, g)
 import Svg.Attributes as SvgA
 import Mouse
 import Time
@@ -28,7 +28,8 @@ type alias Model =
         six : (Float,Float),
         seven : (Float, Float),
         time : Float,
-        rand : Float
+        rand : Float,
+        collision : Bool
     }
 
 
@@ -44,7 +45,8 @@ init =
         six = (125,50),
         seven = (150,20),
         time = 0,
-        rand = 0
+        rand = 0, 
+        collision = False
     },  Cmd.none )
 
 
@@ -57,6 +59,8 @@ type Msg
     | Tock Time.Time
     | Request Float
     | Received Float
+    | RequestCollision Float
+    | ReceivedCollision Bool
 
 
 
@@ -73,16 +77,24 @@ view model =
             div [style [("height", "100%"), ("width", "100%")]] 
             
             [
-                p [style [("float", "left"), ("margin", "0")]] [text (toString(model.rand))], 
-                svg [style [("height", "100%"), ("width", "100%")], onClick (Request 0)]
+                p [style [("float", "left"), ("margin", "0")]] [text (toString(model.rand))],
+                p [style [("float", "right"), ("margin", "0")]] [text (toString(model.collision))],
+
+                svg [id "svg", style [("height", "100%"), ("width", "100%")], onClick (Request 0)]
                 [
-                    ellipse [SvgA.cx "50vw", (SvgA.cy (toString(model.circleYPosition)++"vh")), SvgA.rx "100", SvgA.ry "180", SvgA.fill "none", SvgA.stroke "black", SvgA.strokeWidth "10"] [],
-                    line [SvgA.x1 (toString(first(model.one))++"vw"), SvgA.y1 (toString(second(model.one))++"vh"), SvgA.x2 (toString(first(model.one) + 25)++"vw"), SvgA.y2 (toString(second(model.two))++"vh"), SvgA.stroke "black", SvgA.strokeWidth "10"] [],
-                    line [SvgA.x1 (toString(first(model.two))++"vw"), SvgA.y1 (toString(second(model.two))++"vh"), SvgA.x2 (toString(first(model.two) + 25)++"vw"), SvgA.y2 (toString(second(model.three))++"vh"), SvgA.stroke "black", SvgA.strokeWidth "10"] [],
-                    line [SvgA.x1 (toString(first(model.three))++"vw"), SvgA.y1 (toString(second(model.three))++"vh"), SvgA.x2 (toString(first(model.three) + 25)++"vw"), SvgA.y2 (toString(second(model.four))++"vh"), SvgA.stroke "black", SvgA.strokeWidth "10"] [],
-                    line [SvgA.x1 (toString(first(model.four))++"vw"), SvgA.y1 (toString(second(model.four))++"vh"), SvgA.x2 (toString(first(model.four) + 25)++"vw"), SvgA.y2 (toString(second(model.five))++"vh"), SvgA.stroke "black", SvgA.strokeWidth "10"] [],
-                    line [SvgA.x1 (toString(first(model.five))++"vw"), SvgA.y1 (toString(second(model.five))++"vh"), SvgA.x2 (toString(first(model.five) + 25)++"vw"), SvgA.y2 (toString(second(model.six))++"vh"), SvgA.stroke "black", SvgA.strokeWidth "10"] [],
-                    line [SvgA.x1 (toString(first(model.six))++"vw"), SvgA.y1 (toString(second(model.six))++"vh"), SvgA.x2 (toString(first(model.six) + 25)++"vw"), SvgA.y2 (toString(second(model.one))++"vh"), SvgA.stroke "black", SvgA.strokeWidth "10"] []
+                    rect [id "upperHitBox", SvgA.width "50px", SvgA.height "10", SvgA.fill "blue", style [("y", "calc(" ++ toString(model.circleYPosition) ++ "% - 180px"), ("x", "calc(50% - 25px)")]] [],
+                    rect [id "lowerHitBox", SvgA.width "50px", SvgA.height "10", SvgA.fill "red", style [("y", "calc(" ++ toString(model.circleYPosition) ++ "% + 170px"), ("x", "calc(50% - 25px)")]] [],
+                    ellipse [SvgA.cx "50%", (SvgA.cy (toString(model.circleYPosition)++"%")), SvgA.rx "100", SvgA.ry "180", SvgA.fill "none", SvgA.stroke "black", SvgA.strokeWidth "10"] [],
+
+                    g [id "track"] 
+                    [
+                        line [id "line1", SvgA.x1 (toString(first(model.one))++"%"), SvgA.y1 (toString(second(model.one))++"%"), SvgA.x2 (toString(first(model.one) + 25)++"%"), SvgA.y2 (toString(second(model.two))++"%"), SvgA.stroke "black", SvgA.strokeWidth "10"] [],
+                        line [id "line2", SvgA.x1 (toString(first(model.two))++"%"), SvgA.y1 (toString(second(model.two))++"%"), SvgA.x2 (toString(first(model.two) + 25)++"%"), SvgA.y2 (toString(second(model.three))++"%"), SvgA.stroke "black", SvgA.strokeWidth "10"] [],
+                        line [id "line3", SvgA.x1 (toString(first(model.three))++"%"), SvgA.y1 (toString(second(model.three))++"%"), SvgA.x2 (toString(first(model.three) + 25)++"%"), SvgA.y2 (toString(second(model.four))++"%"), SvgA.stroke "black", SvgA.strokeWidth "10"] [],
+                        line [id "line4", SvgA.x1 (toString(first(model.four))++"%"), SvgA.y1 (toString(second(model.four))++"%"), SvgA.x2 (toString(first(model.four) + 25)++"%"), SvgA.y2 (toString(second(model.five))++"%"), SvgA.stroke "black", SvgA.strokeWidth "10"] [],
+                        line [id "line5", SvgA.x1 (toString(first(model.five))++"%"), SvgA.y1 (toString(second(model.five))++"%"), SvgA.x2 (toString(first(model.five) + 25)++"%"), SvgA.y2 (toString(second(model.six))++"%"), SvgA.stroke "black", SvgA.strokeWidth "10"] [],
+                        line [id "line6", SvgA.x1 (toString(first(model.six))++"%"), SvgA.y1 (toString(second(model.six))++"%"), SvgA.x2 (toString(first(model.six) + 25)++"%"), SvgA.y2 (toString(second(model.one))++"%"), SvgA.stroke "black", SvgA.strokeWidth "10"] []
+                    ]
                 ]
             ]
 
@@ -95,10 +107,14 @@ port requestRandom : Float -> Cmd msg
 
 port receiveRandom : (Float -> msg) -> Sub msg
 
+port requestCheck : Float -> Cmd msg
+
+port receiveCheck : (Bool -> msg) -> Sub msg
+
 request x = (Request 0)
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg {circleYPosition, one, two, three, four, five, six, seven, time, rand} = 
+update msg {circleYPosition, one, two, three, four, five, six, seven, time, rand, collision} = 
          if first(one) < -25 then
                 ({
                     circleYPosition = circleYPosition,
@@ -110,7 +126,8 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time, rand
                     six = six,
                     seven = seven,
                     time = time,
-                    rand = rand
+                    rand = rand,
+                    collision = collision
                 }, Cmd.none)
         else if first(two) < -25 then
                 ({
@@ -123,7 +140,8 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time, rand
                     six = six,
                     seven = seven,
                     time = time,
-                    rand = rand
+                    rand = rand,
+                    collision = collision
                 }, Cmd.none)
         else if first(three) < -25 then
                 ({
@@ -136,7 +154,8 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time, rand
                     six = six,
                     seven = seven,
                     time = time,
-                    rand = rand
+                    rand = rand,
+                    collision = collision
                 }, Cmd.none)
 
         else if first(four) < -25 then
@@ -150,7 +169,8 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time, rand
                     six = six,
                     seven = seven,
                     time = time,
-                    rand = rand
+                    rand = rand,
+                    collision = collision
                 }, Cmd.none)
         else if first(five) < -25 then
                 ({
@@ -163,7 +183,8 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time, rand
                     six = six,
                     seven = seven,
                     time = time,
-                    rand = rand
+                    rand = rand,
+                    collision = collision
                 }, Cmd.none)
         else if first(six) < -25 then
                 ({
@@ -176,7 +197,8 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time, rand
                     six = (125,rand),
                     seven = seven,
                     time = time,
-                    rand = rand
+                    rand = rand,
+                    collision = collision
                 }, Cmd.none)
         else if first(seven) < -25 then
                 ({
@@ -189,7 +211,8 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time, rand
                     six = six,
                     seven = (125, rand),
                     time = time,
-                    rand = rand
+                    rand = rand,
+                    collision = collision
                 }, Cmd.none)
         else
             case msg of
@@ -203,7 +226,8 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time, rand
                         six = six,
                         seven = seven,
                         time = time,
-                        rand = rand
+                        rand = rand,
+                        collision = collision
                     }, Cmd.none)
                 (Tick _) -> ({
                         circleYPosition = circleYPosition + 0.05,
@@ -215,8 +239,9 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time, rand
                         six = (first(six)-0.05, second(six)),
                         seven = (first(seven)-0.05, second(seven)),
                         time = time,
-                        rand = rand
-                    }, Cmd.none)
+                        rand = rand,
+                        collision = collision
+                    }, requestCheck 0)
                 (Tock _) -> ({
                         circleYPosition = circleYPosition,
                         one = one,
@@ -227,7 +252,8 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time, rand
                         six = six,
                         seven = seven,
                         time = time +1,
-                        rand = rand
+                        rand = rand,
+                        collision = collision
                     }, requestRandom 0)
                 (Request a) -> ({
                         circleYPosition = circleYPosition,
@@ -239,7 +265,8 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time, rand
                         six = six,
                         seven = seven,
                         time = time,
-                        rand = rand
+                        rand = rand,
+                        collision = collision
                     }, requestRandom a)
                 (Received a) -> ({
                         circleYPosition = circleYPosition,
@@ -251,7 +278,34 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time, rand
                         six = six,
                         seven = seven,
                         time = time,
-                        rand = a
+                        rand = a,
+                        collision = collision
+                    }, Cmd.none)
+                (RequestCollision a) -> ({
+                        circleYPosition = circleYPosition,
+                        one = one,
+                        two = two,
+                        three = three,
+                        four = four,
+                        five = five,
+                        six = six,
+                        seven = seven,
+                        time = time,
+                        rand = rand,
+                        collision = collision
+                    }, requestCheck a)
+                (ReceivedCollision a) -> ({
+                        circleYPosition = circleYPosition,
+                        one = one,
+                        two = two,
+                        three = three,
+                        four = four,
+                        five = five,
+                        six = six,
+                        seven = seven,
+                        time = time,
+                        rand = rand,
+                        collision = a
                     }, Cmd.none)
 
 
@@ -263,9 +317,10 @@ subscriptions model =
     Sub.batch 
     [
         Mouse.clicks MouseMsg,
-        Anim.times Tick,
+        -- Anim.times Tick,
         Anim.times Tock,
-        receiveRandom Received
+        receiveRandom Received,
+        receiveCheck ReceivedCollision
     ]
 
 

@@ -9942,7 +9942,8 @@ var _user$project$App$init = {
 		six: {ctor: '_Tuple2', _0: 125, _1: 50},
 		seven: {ctor: '_Tuple2', _0: 150, _1: 20},
 		time: 0,
-		rand: 0
+		rand: 0,
+		collision: false
 	},
 	_1: _elm_lang$core$Platform_Cmd$none
 };
@@ -9951,155 +9952,169 @@ var _user$project$App$requestRandom = _elm_lang$core$Native_Platform.outgoingPor
 	function (v) {
 		return v;
 	});
+var _user$project$App$receiveRandom = _elm_lang$core$Native_Platform.incomingPort('receiveRandom', _elm_lang$core$Json_Decode$float);
+var _user$project$App$requestCheck = _elm_lang$core$Native_Platform.outgoingPort(
+	'requestCheck',
+	function (v) {
+		return v;
+	});
 var _user$project$App$update = F2(
 	function (msg, _p0) {
 		var _p1 = _p0;
-		var _p12 = _p1.two;
-		var _p11 = _p1.time;
-		var _p10 = _p1.three;
-		var _p9 = _p1.six;
-		var _p8 = _p1.seven;
-		var _p7 = _p1.rand;
-		var _p6 = _p1.one;
-		var _p5 = _p1.four;
-		var _p4 = _p1.five;
+		var _p13 = _p1.two;
+		var _p12 = _p1.time;
+		var _p11 = _p1.three;
+		var _p10 = _p1.six;
+		var _p9 = _p1.seven;
+		var _p8 = _p1.rand;
+		var _p7 = _p1.one;
+		var _p6 = _p1.four;
+		var _p5 = _p1.five;
+		var _p4 = _p1.collision;
 		var _p3 = _p1.circleYPosition;
 		if (_elm_lang$core$Native_Utils.cmp(
-			_elm_lang$core$Tuple$first(_p6),
+			_elm_lang$core$Tuple$first(_p7),
 			-25) < 0) {
 			return {
 				ctor: '_Tuple2',
 				_0: {
 					circleYPosition: _p3,
-					one: {ctor: '_Tuple2', _0: 125, _1: _p7},
-					two: _p12,
-					three: _p10,
-					four: _p5,
-					five: _p4,
-					six: _p9,
-					seven: _p8,
-					time: _p11,
-					rand: _p7
+					one: {ctor: '_Tuple2', _0: 125, _1: _p8},
+					two: _p13,
+					three: _p11,
+					four: _p6,
+					five: _p5,
+					six: _p10,
+					seven: _p9,
+					time: _p12,
+					rand: _p8,
+					collision: _p4
 				},
 				_1: _elm_lang$core$Platform_Cmd$none
 			};
 		} else {
 			if (_elm_lang$core$Native_Utils.cmp(
-				_elm_lang$core$Tuple$first(_p12),
+				_elm_lang$core$Tuple$first(_p13),
 				-25) < 0) {
 				return {
 					ctor: '_Tuple2',
 					_0: {
 						circleYPosition: _p3,
-						one: _p6,
-						two: {ctor: '_Tuple2', _0: 125, _1: _p7},
-						three: _p10,
-						four: _p5,
-						five: _p4,
-						six: _p9,
-						seven: _p8,
-						time: _p11,
-						rand: _p7
+						one: _p7,
+						two: {ctor: '_Tuple2', _0: 125, _1: _p8},
+						three: _p11,
+						four: _p6,
+						five: _p5,
+						six: _p10,
+						seven: _p9,
+						time: _p12,
+						rand: _p8,
+						collision: _p4
 					},
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			} else {
 				if (_elm_lang$core$Native_Utils.cmp(
-					_elm_lang$core$Tuple$first(_p10),
+					_elm_lang$core$Tuple$first(_p11),
 					-25) < 0) {
 					return {
 						ctor: '_Tuple2',
 						_0: {
 							circleYPosition: _p3,
-							one: _p6,
-							two: _p12,
-							three: {ctor: '_Tuple2', _0: 125, _1: _p7},
-							four: _p5,
-							five: _p4,
-							six: _p9,
-							seven: _p8,
-							time: _p11,
-							rand: _p7
+							one: _p7,
+							two: _p13,
+							three: {ctor: '_Tuple2', _0: 125, _1: _p8},
+							four: _p6,
+							five: _p5,
+							six: _p10,
+							seven: _p9,
+							time: _p12,
+							rand: _p8,
+							collision: _p4
 						},
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				} else {
 					if (_elm_lang$core$Native_Utils.cmp(
-						_elm_lang$core$Tuple$first(_p5),
+						_elm_lang$core$Tuple$first(_p6),
 						-25) < 0) {
 						return {
 							ctor: '_Tuple2',
 							_0: {
 								circleYPosition: _p3,
-								one: _p6,
-								two: _p12,
-								three: _p10,
-								four: {ctor: '_Tuple2', _0: 125, _1: _p7},
-								five: _p4,
-								six: _p9,
-								seven: _p8,
-								time: _p11,
-								rand: _p7
+								one: _p7,
+								two: _p13,
+								three: _p11,
+								four: {ctor: '_Tuple2', _0: 125, _1: _p8},
+								five: _p5,
+								six: _p10,
+								seven: _p9,
+								time: _p12,
+								rand: _p8,
+								collision: _p4
 							},
 							_1: _elm_lang$core$Platform_Cmd$none
 						};
 					} else {
 						if (_elm_lang$core$Native_Utils.cmp(
-							_elm_lang$core$Tuple$first(_p4),
+							_elm_lang$core$Tuple$first(_p5),
 							-25) < 0) {
 							return {
 								ctor: '_Tuple2',
 								_0: {
 									circleYPosition: _p3,
-									one: _p6,
-									two: _p12,
-									three: _p10,
-									four: _p5,
-									five: {ctor: '_Tuple2', _0: 125, _1: _p7},
-									six: _p9,
-									seven: _p8,
-									time: _p11,
-									rand: _p7
+									one: _p7,
+									two: _p13,
+									three: _p11,
+									four: _p6,
+									five: {ctor: '_Tuple2', _0: 125, _1: _p8},
+									six: _p10,
+									seven: _p9,
+									time: _p12,
+									rand: _p8,
+									collision: _p4
 								},
 								_1: _elm_lang$core$Platform_Cmd$none
 							};
 						} else {
 							if (_elm_lang$core$Native_Utils.cmp(
-								_elm_lang$core$Tuple$first(_p9),
+								_elm_lang$core$Tuple$first(_p10),
 								-25) < 0) {
 								return {
 									ctor: '_Tuple2',
 									_0: {
 										circleYPosition: _p3,
-										one: _p6,
-										two: _p12,
-										three: _p10,
-										four: _p5,
-										five: _p4,
-										six: {ctor: '_Tuple2', _0: 125, _1: _p7},
-										seven: _p8,
-										time: _p11,
-										rand: _p7
+										one: _p7,
+										two: _p13,
+										three: _p11,
+										four: _p6,
+										five: _p5,
+										six: {ctor: '_Tuple2', _0: 125, _1: _p8},
+										seven: _p9,
+										time: _p12,
+										rand: _p8,
+										collision: _p4
 									},
 									_1: _elm_lang$core$Platform_Cmd$none
 								};
 							} else {
 								if (_elm_lang$core$Native_Utils.cmp(
-									_elm_lang$core$Tuple$first(_p8),
+									_elm_lang$core$Tuple$first(_p9),
 									-25) < 0) {
 									return {
 										ctor: '_Tuple2',
 										_0: {
 											circleYPosition: _p3,
-											one: _p6,
-											two: _p12,
-											three: _p10,
-											four: _p5,
-											five: _p4,
-											six: _p9,
-											seven: {ctor: '_Tuple2', _0: 125, _1: _p7},
-											time: _p11,
-											rand: _p7
+											one: _p7,
+											two: _p13,
+											three: _p11,
+											four: _p6,
+											five: _p5,
+											six: _p10,
+											seven: {ctor: '_Tuple2', _0: 125, _1: _p8},
+											time: _p12,
+											rand: _p8,
+											collision: _p4
 										},
 										_1: _elm_lang$core$Platform_Cmd$none
 									};
@@ -10109,7 +10124,7 @@ var _user$project$App$update = F2(
 										case 'MouseMsg':
 											return {
 												ctor: '_Tuple2',
-												_0: {circleYPosition: _p3 - 10, one: _p6, two: _p12, three: _p10, four: _p5, five: _p4, six: _p9, seven: _p8, time: _p11, rand: _p7},
+												_0: {circleYPosition: _p3 - 10, one: _p7, two: _p13, three: _p11, four: _p6, five: _p5, six: _p10, seven: _p9, time: _p12, rand: _p8, collision: _p4},
 												_1: _elm_lang$core$Platform_Cmd$none
 											};
 										case 'Tick':
@@ -10119,60 +10134,73 @@ var _user$project$App$update = F2(
 													circleYPosition: _p3 + 5.0e-2,
 													one: {
 														ctor: '_Tuple2',
-														_0: _elm_lang$core$Tuple$first(_p6) - 5.0e-2,
-														_1: _elm_lang$core$Tuple$second(_p6)
+														_0: _elm_lang$core$Tuple$first(_p7) - 5.0e-2,
+														_1: _elm_lang$core$Tuple$second(_p7)
 													},
 													two: {
 														ctor: '_Tuple2',
-														_0: _elm_lang$core$Tuple$first(_p12) - 5.0e-2,
-														_1: _elm_lang$core$Tuple$second(_p12)
+														_0: _elm_lang$core$Tuple$first(_p13) - 5.0e-2,
+														_1: _elm_lang$core$Tuple$second(_p13)
 													},
 													three: {
 														ctor: '_Tuple2',
-														_0: _elm_lang$core$Tuple$first(_p10) - 5.0e-2,
-														_1: _elm_lang$core$Tuple$second(_p10)
+														_0: _elm_lang$core$Tuple$first(_p11) - 5.0e-2,
+														_1: _elm_lang$core$Tuple$second(_p11)
 													},
 													four: {
+														ctor: '_Tuple2',
+														_0: _elm_lang$core$Tuple$first(_p6) - 5.0e-2,
+														_1: _elm_lang$core$Tuple$second(_p6)
+													},
+													five: {
 														ctor: '_Tuple2',
 														_0: _elm_lang$core$Tuple$first(_p5) - 5.0e-2,
 														_1: _elm_lang$core$Tuple$second(_p5)
 													},
-													five: {
-														ctor: '_Tuple2',
-														_0: _elm_lang$core$Tuple$first(_p4) - 5.0e-2,
-														_1: _elm_lang$core$Tuple$second(_p4)
-													},
 													six: {
+														ctor: '_Tuple2',
+														_0: _elm_lang$core$Tuple$first(_p10) - 5.0e-2,
+														_1: _elm_lang$core$Tuple$second(_p10)
+													},
+													seven: {
 														ctor: '_Tuple2',
 														_0: _elm_lang$core$Tuple$first(_p9) - 5.0e-2,
 														_1: _elm_lang$core$Tuple$second(_p9)
 													},
-													seven: {
-														ctor: '_Tuple2',
-														_0: _elm_lang$core$Tuple$first(_p8) - 5.0e-2,
-														_1: _elm_lang$core$Tuple$second(_p8)
-													},
-													time: _p11,
-													rand: _p7
+													time: _p12,
+													rand: _p8,
+													collision: _p4
 												},
-												_1: _elm_lang$core$Platform_Cmd$none
+												_1: _user$project$App$requestCheck(0)
 											};
 										case 'Tock':
 											return {
 												ctor: '_Tuple2',
-												_0: {circleYPosition: _p3, one: _p6, two: _p12, three: _p10, four: _p5, five: _p4, six: _p9, seven: _p8, time: _p11 + 1, rand: _p7},
+												_0: {circleYPosition: _p3, one: _p7, two: _p13, three: _p11, four: _p6, five: _p5, six: _p10, seven: _p9, time: _p12 + 1, rand: _p8, collision: _p4},
 												_1: _user$project$App$requestRandom(0)
 											};
 										case 'Request':
 											return {
 												ctor: '_Tuple2',
-												_0: {circleYPosition: _p3, one: _p6, two: _p12, three: _p10, four: _p5, five: _p4, six: _p9, seven: _p8, time: _p11, rand: _p7},
+												_0: {circleYPosition: _p3, one: _p7, two: _p13, three: _p11, four: _p6, five: _p5, six: _p10, seven: _p9, time: _p12, rand: _p8, collision: _p4},
 												_1: _user$project$App$requestRandom(_p2._0)
+											};
+										case 'Received':
+											return {
+												ctor: '_Tuple2',
+												_0: {circleYPosition: _p3, one: _p7, two: _p13, three: _p11, four: _p6, five: _p5, six: _p10, seven: _p9, time: _p12, rand: _p2._0, collision: _p4},
+												_1: _elm_lang$core$Platform_Cmd$none
+											};
+										case 'RequestCollision':
+											return {
+												ctor: '_Tuple2',
+												_0: {circleYPosition: _p3, one: _p7, two: _p13, three: _p11, four: _p6, five: _p5, six: _p10, seven: _p9, time: _p12, rand: _p8, collision: _p4},
+												_1: _user$project$App$requestCheck(_p2._0)
 											};
 										default:
 											return {
 												ctor: '_Tuple2',
-												_0: {circleYPosition: _p3, one: _p6, two: _p12, three: _p10, four: _p5, five: _p4, six: _p9, seven: _p8, time: _p11, rand: _p2._0},
+												_0: {circleYPosition: _p3, one: _p7, two: _p13, three: _p11, four: _p6, five: _p5, six: _p10, seven: _p9, time: _p12, rand: _p8, collision: _p2._0},
 												_1: _elm_lang$core$Platform_Cmd$none
 											};
 									}
@@ -10184,7 +10212,7 @@ var _user$project$App$update = F2(
 			}
 		}
 	});
-var _user$project$App$receiveRandom = _elm_lang$core$Native_Platform.incomingPort('receiveRandom', _elm_lang$core$Json_Decode$float);
+var _user$project$App$receiveCheck = _elm_lang$core$Native_Platform.incomingPort('receiveCheck', _elm_lang$core$Json_Decode$bool);
 var _user$project$App$Model = function (a) {
 	return function (b) {
 		return function (c) {
@@ -10195,7 +10223,9 @@ var _user$project$App$Model = function (a) {
 							return function (h) {
 								return function (i) {
 									return function (j) {
-										return {circleYPosition: a, one: b, two: c, three: d, four: e, five: f, six: g, seven: h, time: i, rand: j};
+										return function (k) {
+											return {circleYPosition: a, one: b, two: c, three: d, four: e, five: f, six: g, seven: h, time: i, rand: j, collision: k};
+										};
 									};
 								};
 							};
@@ -10205,6 +10235,12 @@ var _user$project$App$Model = function (a) {
 			};
 		};
 	};
+};
+var _user$project$App$ReceivedCollision = function (a) {
+	return {ctor: 'ReceivedCollision', _0: a};
+};
+var _user$project$App$RequestCollision = function (a) {
+	return {ctor: 'RequestCollision', _0: a};
 };
 var _user$project$App$Received = function (a) {
 	return {ctor: 'Received', _0: a};
@@ -10256,108 +10292,93 @@ var _user$project$App$view = function (model) {
 			_1: {
 				ctor: '::',
 				_0: A2(
-					_elm_lang$svg$Svg$svg,
+					_elm_lang$html$Html$p,
 					{
 						ctor: '::',
 						_0: _elm_lang$html$Html_Attributes$style(
 							{
 								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 'height', _1: '100%'},
+								_0: {ctor: '_Tuple2', _0: 'float', _1: 'right'},
 								_1: {
 									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'width', _1: '100%'},
+									_0: {ctor: '_Tuple2', _0: 'margin', _1: '0'},
 									_1: {ctor: '[]'}
 								}
 							}),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onClick(
-								_user$project$App$Request(0)),
-							_1: {ctor: '[]'}
-						}
+						_1: {ctor: '[]'}
 					},
 					{
 						ctor: '::',
-						_0: A2(
-							_elm_lang$svg$Svg$ellipse,
-							{
+						_0: _elm_lang$html$Html$text(
+							_elm_lang$core$Basics$toString(model.collision)),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$svg$Svg$svg,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$id('svg'),
+							_1: {
 								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$cx('50vw'),
+								_0: _elm_lang$html$Html_Attributes$style(
+									{
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'height', _1: '100%'},
+										_1: {
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: 'width', _1: '100%'},
+											_1: {ctor: '[]'}
+										}
+									}),
 								_1: {
 									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$cy(
-										A2(
-											_elm_lang$core$Basics_ops['++'],
-											_elm_lang$core$Basics$toString(model.circleYPosition),
-											'vh')),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$rx('100'),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$svg$Svg_Attributes$ry('180'),
-											_1: {
-												ctor: '::',
-												_0: _elm_lang$svg$Svg_Attributes$fill('none'),
-												_1: {
-													ctor: '::',
-													_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
-													_1: {
-														ctor: '::',
-														_0: _elm_lang$svg$Svg_Attributes$strokeWidth('10'),
-														_1: {ctor: '[]'}
-													}
-												}
-											}
-										}
-									}
+									_0: _elm_lang$html$Html_Events$onClick(
+										_user$project$App$Request(0)),
+									_1: {ctor: '[]'}
 								}
-							},
-							{ctor: '[]'}),
-						_1: {
+							}
+						},
+						{
 							ctor: '::',
 							_0: A2(
-								_elm_lang$svg$Svg$line,
+								_elm_lang$svg$Svg$rect,
 								{
 									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$x1(
-										A2(
-											_elm_lang$core$Basics_ops['++'],
-											_elm_lang$core$Basics$toString(
-												_elm_lang$core$Tuple$first(model.one)),
-											'vw')),
+									_0: _elm_lang$html$Html_Attributes$id('upperHitBox'),
 									_1: {
 										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$y1(
-											A2(
-												_elm_lang$core$Basics_ops['++'],
-												_elm_lang$core$Basics$toString(
-													_elm_lang$core$Tuple$second(model.one)),
-												'vh')),
+										_0: _elm_lang$svg$Svg_Attributes$width('50px'),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$svg$Svg_Attributes$x2(
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													_elm_lang$core$Basics$toString(
-														_elm_lang$core$Tuple$first(model.one) + 25),
-													'vw')),
+											_0: _elm_lang$svg$Svg_Attributes$height('10'),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$svg$Svg_Attributes$y2(
-													A2(
-														_elm_lang$core$Basics_ops['++'],
-														_elm_lang$core$Basics$toString(
-															_elm_lang$core$Tuple$second(model.two)),
-														'vh')),
+												_0: _elm_lang$svg$Svg_Attributes$fill('blue'),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
-													_1: {
-														ctor: '::',
-														_0: _elm_lang$svg$Svg_Attributes$strokeWidth('10'),
-														_1: {ctor: '[]'}
-													}
+													_0: _elm_lang$html$Html_Attributes$style(
+														{
+															ctor: '::',
+															_0: {
+																ctor: '_Tuple2',
+																_0: 'y',
+																_1: A2(
+																	_elm_lang$core$Basics_ops['++'],
+																	'calc(',
+																	A2(
+																		_elm_lang$core$Basics_ops['++'],
+																		_elm_lang$core$Basics$toString(model.circleYPosition),
+																		'% - 180px'))
+															},
+															_1: {
+																ctor: '::',
+																_0: {ctor: '_Tuple2', _0: 'x', _1: 'calc(50% - 25px)'},
+																_1: {ctor: '[]'}
+															}
+														}),
+													_1: {ctor: '[]'}
 												}
 											}
 										}
@@ -10367,47 +10388,42 @@ var _user$project$App$view = function (model) {
 							_1: {
 								ctor: '::',
 								_0: A2(
-									_elm_lang$svg$Svg$line,
+									_elm_lang$svg$Svg$rect,
 									{
 										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$x1(
-											A2(
-												_elm_lang$core$Basics_ops['++'],
-												_elm_lang$core$Basics$toString(
-													_elm_lang$core$Tuple$first(model.two)),
-												'vw')),
+										_0: _elm_lang$html$Html_Attributes$id('lowerHitBox'),
 										_1: {
 											ctor: '::',
-											_0: _elm_lang$svg$Svg_Attributes$y1(
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													_elm_lang$core$Basics$toString(
-														_elm_lang$core$Tuple$second(model.two)),
-													'vh')),
+											_0: _elm_lang$svg$Svg_Attributes$width('50px'),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$svg$Svg_Attributes$x2(
-													A2(
-														_elm_lang$core$Basics_ops['++'],
-														_elm_lang$core$Basics$toString(
-															_elm_lang$core$Tuple$first(model.two) + 25),
-														'vw')),
+												_0: _elm_lang$svg$Svg_Attributes$height('10'),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$svg$Svg_Attributes$y2(
-														A2(
-															_elm_lang$core$Basics_ops['++'],
-															_elm_lang$core$Basics$toString(
-																_elm_lang$core$Tuple$second(model.three)),
-															'vh')),
+													_0: _elm_lang$svg$Svg_Attributes$fill('red'),
 													_1: {
 														ctor: '::',
-														_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
-														_1: {
-															ctor: '::',
-															_0: _elm_lang$svg$Svg_Attributes$strokeWidth('10'),
-															_1: {ctor: '[]'}
-														}
+														_0: _elm_lang$html$Html_Attributes$style(
+															{
+																ctor: '::',
+																_0: {
+																	ctor: '_Tuple2',
+																	_0: 'y',
+																	_1: A2(
+																		_elm_lang$core$Basics_ops['++'],
+																		'calc(',
+																		A2(
+																			_elm_lang$core$Basics_ops['++'],
+																			_elm_lang$core$Basics$toString(model.circleYPosition),
+																			'% + 170px'))
+																},
+																_1: {
+																	ctor: '::',
+																	_0: {ctor: '_Tuple2', _0: 'x', _1: 'calc(50% - 25px)'},
+																	_1: {ctor: '[]'}
+																}
+															}),
+														_1: {ctor: '[]'}
 													}
 												}
 											}
@@ -10417,89 +10433,26 @@ var _user$project$App$view = function (model) {
 								_1: {
 									ctor: '::',
 									_0: A2(
-										_elm_lang$svg$Svg$line,
+										_elm_lang$svg$Svg$ellipse,
 										{
 											ctor: '::',
-											_0: _elm_lang$svg$Svg_Attributes$x1(
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													_elm_lang$core$Basics$toString(
-														_elm_lang$core$Tuple$first(model.three)),
-													'vw')),
+											_0: _elm_lang$svg$Svg_Attributes$cx('50%'),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$svg$Svg_Attributes$y1(
+												_0: _elm_lang$svg$Svg_Attributes$cy(
 													A2(
 														_elm_lang$core$Basics_ops['++'],
-														_elm_lang$core$Basics$toString(
-															_elm_lang$core$Tuple$second(model.three)),
-														'vh')),
+														_elm_lang$core$Basics$toString(model.circleYPosition),
+														'%')),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$svg$Svg_Attributes$x2(
-														A2(
-															_elm_lang$core$Basics_ops['++'],
-															_elm_lang$core$Basics$toString(
-																_elm_lang$core$Tuple$first(model.three) + 25),
-															'vw')),
+													_0: _elm_lang$svg$Svg_Attributes$rx('100'),
 													_1: {
 														ctor: '::',
-														_0: _elm_lang$svg$Svg_Attributes$y2(
-															A2(
-																_elm_lang$core$Basics_ops['++'],
-																_elm_lang$core$Basics$toString(
-																	_elm_lang$core$Tuple$second(model.four)),
-																'vh')),
+														_0: _elm_lang$svg$Svg_Attributes$ry('180'),
 														_1: {
 															ctor: '::',
-															_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
-															_1: {
-																ctor: '::',
-																_0: _elm_lang$svg$Svg_Attributes$strokeWidth('10'),
-																_1: {ctor: '[]'}
-															}
-														}
-													}
-												}
-											}
-										},
-										{ctor: '[]'}),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_elm_lang$svg$Svg$line,
-											{
-												ctor: '::',
-												_0: _elm_lang$svg$Svg_Attributes$x1(
-													A2(
-														_elm_lang$core$Basics_ops['++'],
-														_elm_lang$core$Basics$toString(
-															_elm_lang$core$Tuple$first(model.four)),
-														'vw')),
-												_1: {
-													ctor: '::',
-													_0: _elm_lang$svg$Svg_Attributes$y1(
-														A2(
-															_elm_lang$core$Basics_ops['++'],
-															_elm_lang$core$Basics$toString(
-																_elm_lang$core$Tuple$second(model.four)),
-															'vh')),
-													_1: {
-														ctor: '::',
-														_0: _elm_lang$svg$Svg_Attributes$x2(
-															A2(
-																_elm_lang$core$Basics_ops['++'],
-																_elm_lang$core$Basics$toString(
-																	_elm_lang$core$Tuple$first(model.four) + 25),
-																'vw')),
-														_1: {
-															ctor: '::',
-															_0: _elm_lang$svg$Svg_Attributes$y2(
-																A2(
-																	_elm_lang$core$Basics_ops['++'],
-																	_elm_lang$core$Basics$toString(
-																		_elm_lang$core$Tuple$second(model.five)),
-																	'vh')),
+															_0: _elm_lang$svg$Svg_Attributes$fill('none'),
 															_1: {
 																ctor: '::',
 																_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
@@ -10512,101 +10465,65 @@ var _user$project$App$view = function (model) {
 														}
 													}
 												}
+											}
+										},
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$svg$Svg$g,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$id('track'),
+												_1: {ctor: '[]'}
 											},
-											{ctor: '[]'}),
-										_1: {
-											ctor: '::',
-											_0: A2(
-												_elm_lang$svg$Svg$line,
-												{
-													ctor: '::',
-													_0: _elm_lang$svg$Svg_Attributes$x1(
-														A2(
-															_elm_lang$core$Basics_ops['++'],
-															_elm_lang$core$Basics$toString(
-																_elm_lang$core$Tuple$first(model.five)),
-															'vw')),
-													_1: {
-														ctor: '::',
-														_0: _elm_lang$svg$Svg_Attributes$y1(
-															A2(
-																_elm_lang$core$Basics_ops['++'],
-																_elm_lang$core$Basics$toString(
-																	_elm_lang$core$Tuple$second(model.five)),
-																'vh')),
-														_1: {
-															ctor: '::',
-															_0: _elm_lang$svg$Svg_Attributes$x2(
-																A2(
-																	_elm_lang$core$Basics_ops['++'],
-																	_elm_lang$core$Basics$toString(
-																		_elm_lang$core$Tuple$first(model.five) + 25),
-																	'vw')),
-															_1: {
-																ctor: '::',
-																_0: _elm_lang$svg$Svg_Attributes$y2(
-																	A2(
-																		_elm_lang$core$Basics_ops['++'],
-																		_elm_lang$core$Basics$toString(
-																			_elm_lang$core$Tuple$second(model.six)),
-																		'vh')),
-																_1: {
-																	ctor: '::',
-																	_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
-																	_1: {
-																		ctor: '::',
-																		_0: _elm_lang$svg$Svg_Attributes$strokeWidth('10'),
-																		_1: {ctor: '[]'}
-																	}
-																}
-															}
-														}
-													}
-												},
-												{ctor: '[]'}),
-											_1: {
+											{
 												ctor: '::',
 												_0: A2(
 													_elm_lang$svg$Svg$line,
 													{
 														ctor: '::',
-														_0: _elm_lang$svg$Svg_Attributes$x1(
-															A2(
-																_elm_lang$core$Basics_ops['++'],
-																_elm_lang$core$Basics$toString(
-																	_elm_lang$core$Tuple$first(model.six)),
-																'vw')),
+														_0: _elm_lang$html$Html_Attributes$id('line1'),
 														_1: {
 															ctor: '::',
-															_0: _elm_lang$svg$Svg_Attributes$y1(
+															_0: _elm_lang$svg$Svg_Attributes$x1(
 																A2(
 																	_elm_lang$core$Basics_ops['++'],
 																	_elm_lang$core$Basics$toString(
-																		_elm_lang$core$Tuple$second(model.six)),
-																	'vh')),
+																		_elm_lang$core$Tuple$first(model.one)),
+																	'%')),
 															_1: {
 																ctor: '::',
-																_0: _elm_lang$svg$Svg_Attributes$x2(
+																_0: _elm_lang$svg$Svg_Attributes$y1(
 																	A2(
 																		_elm_lang$core$Basics_ops['++'],
 																		_elm_lang$core$Basics$toString(
-																			_elm_lang$core$Tuple$first(model.six) + 25),
-																		'vw')),
+																			_elm_lang$core$Tuple$second(model.one)),
+																		'%')),
 																_1: {
 																	ctor: '::',
-																	_0: _elm_lang$svg$Svg_Attributes$y2(
+																	_0: _elm_lang$svg$Svg_Attributes$x2(
 																		A2(
 																			_elm_lang$core$Basics_ops['++'],
 																			_elm_lang$core$Basics$toString(
-																				_elm_lang$core$Tuple$second(model.one)),
-																			'vh')),
+																				_elm_lang$core$Tuple$first(model.one) + 25),
+																			'%')),
 																	_1: {
 																		ctor: '::',
-																		_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+																		_0: _elm_lang$svg$Svg_Attributes$y2(
+																			A2(
+																				_elm_lang$core$Basics_ops['++'],
+																				_elm_lang$core$Basics$toString(
+																					_elm_lang$core$Tuple$second(model.two)),
+																				'%')),
 																		_1: {
 																			ctor: '::',
-																			_0: _elm_lang$svg$Svg_Attributes$strokeWidth('10'),
-																			_1: {ctor: '[]'}
+																			_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+																			_1: {
+																				ctor: '::',
+																				_0: _elm_lang$svg$Svg_Attributes$strokeWidth('10'),
+																				_1: {ctor: '[]'}
+																			}
 																		}
 																	}
 																}
@@ -10614,15 +10531,290 @@ var _user$project$App$view = function (model) {
 														}
 													},
 													{ctor: '[]'}),
-												_1: {ctor: '[]'}
-											}
-										}
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_elm_lang$svg$Svg$line,
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$id('line2'),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$svg$Svg_Attributes$x1(
+																	A2(
+																		_elm_lang$core$Basics_ops['++'],
+																		_elm_lang$core$Basics$toString(
+																			_elm_lang$core$Tuple$first(model.two)),
+																		'%')),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$svg$Svg_Attributes$y1(
+																		A2(
+																			_elm_lang$core$Basics_ops['++'],
+																			_elm_lang$core$Basics$toString(
+																				_elm_lang$core$Tuple$second(model.two)),
+																			'%')),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$svg$Svg_Attributes$x2(
+																			A2(
+																				_elm_lang$core$Basics_ops['++'],
+																				_elm_lang$core$Basics$toString(
+																					_elm_lang$core$Tuple$first(model.two) + 25),
+																				'%')),
+																		_1: {
+																			ctor: '::',
+																			_0: _elm_lang$svg$Svg_Attributes$y2(
+																				A2(
+																					_elm_lang$core$Basics_ops['++'],
+																					_elm_lang$core$Basics$toString(
+																						_elm_lang$core$Tuple$second(model.three)),
+																					'%')),
+																			_1: {
+																				ctor: '::',
+																				_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+																				_1: {
+																					ctor: '::',
+																					_0: _elm_lang$svg$Svg_Attributes$strokeWidth('10'),
+																					_1: {ctor: '[]'}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														},
+														{ctor: '[]'}),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_elm_lang$svg$Svg$line,
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$id('line3'),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$svg$Svg_Attributes$x1(
+																		A2(
+																			_elm_lang$core$Basics_ops['++'],
+																			_elm_lang$core$Basics$toString(
+																				_elm_lang$core$Tuple$first(model.three)),
+																			'%')),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$svg$Svg_Attributes$y1(
+																			A2(
+																				_elm_lang$core$Basics_ops['++'],
+																				_elm_lang$core$Basics$toString(
+																					_elm_lang$core$Tuple$second(model.three)),
+																				'%')),
+																		_1: {
+																			ctor: '::',
+																			_0: _elm_lang$svg$Svg_Attributes$x2(
+																				A2(
+																					_elm_lang$core$Basics_ops['++'],
+																					_elm_lang$core$Basics$toString(
+																						_elm_lang$core$Tuple$first(model.three) + 25),
+																					'%')),
+																			_1: {
+																				ctor: '::',
+																				_0: _elm_lang$svg$Svg_Attributes$y2(
+																					A2(
+																						_elm_lang$core$Basics_ops['++'],
+																						_elm_lang$core$Basics$toString(
+																							_elm_lang$core$Tuple$second(model.four)),
+																						'%')),
+																				_1: {
+																					ctor: '::',
+																					_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+																					_1: {
+																						ctor: '::',
+																						_0: _elm_lang$svg$Svg_Attributes$strokeWidth('10'),
+																						_1: {ctor: '[]'}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															},
+															{ctor: '[]'}),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_elm_lang$svg$Svg$line,
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$id('line4'),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$svg$Svg_Attributes$x1(
+																			A2(
+																				_elm_lang$core$Basics_ops['++'],
+																				_elm_lang$core$Basics$toString(
+																					_elm_lang$core$Tuple$first(model.four)),
+																				'%')),
+																		_1: {
+																			ctor: '::',
+																			_0: _elm_lang$svg$Svg_Attributes$y1(
+																				A2(
+																					_elm_lang$core$Basics_ops['++'],
+																					_elm_lang$core$Basics$toString(
+																						_elm_lang$core$Tuple$second(model.four)),
+																					'%')),
+																			_1: {
+																				ctor: '::',
+																				_0: _elm_lang$svg$Svg_Attributes$x2(
+																					A2(
+																						_elm_lang$core$Basics_ops['++'],
+																						_elm_lang$core$Basics$toString(
+																							_elm_lang$core$Tuple$first(model.four) + 25),
+																						'%')),
+																				_1: {
+																					ctor: '::',
+																					_0: _elm_lang$svg$Svg_Attributes$y2(
+																						A2(
+																							_elm_lang$core$Basics_ops['++'],
+																							_elm_lang$core$Basics$toString(
+																								_elm_lang$core$Tuple$second(model.five)),
+																							'%')),
+																					_1: {
+																						ctor: '::',
+																						_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+																						_1: {
+																							ctor: '::',
+																							_0: _elm_lang$svg$Svg_Attributes$strokeWidth('10'),
+																							_1: {ctor: '[]'}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																},
+																{ctor: '[]'}),
+															_1: {
+																ctor: '::',
+																_0: A2(
+																	_elm_lang$svg$Svg$line,
+																	{
+																		ctor: '::',
+																		_0: _elm_lang$html$Html_Attributes$id('line5'),
+																		_1: {
+																			ctor: '::',
+																			_0: _elm_lang$svg$Svg_Attributes$x1(
+																				A2(
+																					_elm_lang$core$Basics_ops['++'],
+																					_elm_lang$core$Basics$toString(
+																						_elm_lang$core$Tuple$first(model.five)),
+																					'%')),
+																			_1: {
+																				ctor: '::',
+																				_0: _elm_lang$svg$Svg_Attributes$y1(
+																					A2(
+																						_elm_lang$core$Basics_ops['++'],
+																						_elm_lang$core$Basics$toString(
+																							_elm_lang$core$Tuple$second(model.five)),
+																						'%')),
+																				_1: {
+																					ctor: '::',
+																					_0: _elm_lang$svg$Svg_Attributes$x2(
+																						A2(
+																							_elm_lang$core$Basics_ops['++'],
+																							_elm_lang$core$Basics$toString(
+																								_elm_lang$core$Tuple$first(model.five) + 25),
+																							'%')),
+																					_1: {
+																						ctor: '::',
+																						_0: _elm_lang$svg$Svg_Attributes$y2(
+																							A2(
+																								_elm_lang$core$Basics_ops['++'],
+																								_elm_lang$core$Basics$toString(
+																									_elm_lang$core$Tuple$second(model.six)),
+																								'%')),
+																						_1: {
+																							ctor: '::',
+																							_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+																							_1: {
+																								ctor: '::',
+																								_0: _elm_lang$svg$Svg_Attributes$strokeWidth('10'),
+																								_1: {ctor: '[]'}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	},
+																	{ctor: '[]'}),
+																_1: {
+																	ctor: '::',
+																	_0: A2(
+																		_elm_lang$svg$Svg$line,
+																		{
+																			ctor: '::',
+																			_0: _elm_lang$html$Html_Attributes$id('line6'),
+																			_1: {
+																				ctor: '::',
+																				_0: _elm_lang$svg$Svg_Attributes$x1(
+																					A2(
+																						_elm_lang$core$Basics_ops['++'],
+																						_elm_lang$core$Basics$toString(
+																							_elm_lang$core$Tuple$first(model.six)),
+																						'%')),
+																				_1: {
+																					ctor: '::',
+																					_0: _elm_lang$svg$Svg_Attributes$y1(
+																						A2(
+																							_elm_lang$core$Basics_ops['++'],
+																							_elm_lang$core$Basics$toString(
+																								_elm_lang$core$Tuple$second(model.six)),
+																							'%')),
+																					_1: {
+																						ctor: '::',
+																						_0: _elm_lang$svg$Svg_Attributes$x2(
+																							A2(
+																								_elm_lang$core$Basics_ops['++'],
+																								_elm_lang$core$Basics$toString(
+																									_elm_lang$core$Tuple$first(model.six) + 25),
+																								'%')),
+																						_1: {
+																							ctor: '::',
+																							_0: _elm_lang$svg$Svg_Attributes$y2(
+																								A2(
+																									_elm_lang$core$Basics_ops['++'],
+																									_elm_lang$core$Basics$toString(
+																										_elm_lang$core$Tuple$second(model.one)),
+																									'%')),
+																							_1: {
+																								ctor: '::',
+																								_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+																								_1: {
+																									ctor: '::',
+																									_0: _elm_lang$svg$Svg_Attributes$strokeWidth('10'),
+																									_1: {ctor: '[]'}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		},
+																		{ctor: '[]'}),
+																	_1: {ctor: '[]'}
+																}
+															}
+														}
+													}
+												}
+											}),
+										_1: {ctor: '[]'}
 									}
 								}
 							}
-						}
-					}),
-				_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
 			}
 		});
 };
@@ -10652,7 +10844,11 @@ var _user$project$App$subscriptions = function (model) {
 					_1: {
 						ctor: '::',
 						_0: _user$project$App$receiveRandom(_user$project$App$Received),
-						_1: {ctor: '[]'}
+						_1: {
+							ctor: '::',
+							_0: _user$project$App$receiveCheck(_user$project$App$ReceivedCollision),
+							_1: {ctor: '[]'}
+						}
 					}
 				}
 			}
