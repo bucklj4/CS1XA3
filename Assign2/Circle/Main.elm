@@ -1,4 +1,4 @@
-module App exposing (..)
+port module App exposing (..)
 
 import Html exposing (..)
 import Html.Events exposing (onClick)
@@ -11,6 +11,8 @@ import AnimationFrame as Anim
 import Random
 import Basics exposing (sin, abs)
 import Tuple exposing (first,second)
+import Array
+
 
 -- MODEL
 
@@ -25,7 +27,8 @@ type alias Model =
         five : (Float,Float),
         six : (Float,Float),
         seven : (Float, Float),
-        time : Float
+        time : Float,
+        rand : Float
     }
 
 
@@ -40,7 +43,8 @@ init =
         five = (100,30),
         six = (125,50),
         seven = (150,20),
-        time = 0
+        time = 0,
+        rand = 0
     },  Cmd.none )
 
 
@@ -51,6 +55,8 @@ type Msg
     = MouseMsg Mouse.Position
     | Tick Time.Time
     | Tock Time.Time
+    | Request Float
+    | Received Float
 
 
 
@@ -67,7 +73,8 @@ view model =
             div [style [("height", "100%"), ("width", "100%")]] 
             
             [
-                svg [style [("height", "100%"), ("width", "100%")]]
+                p [style [("float", "left"), ("margin", "0")]] [text (toString(model.rand))], 
+                svg [style [("height", "100%"), ("width", "100%")], onClick (Request 0)]
                 [
                     ellipse [SvgA.cx "50vw", (SvgA.cy (toString(model.circleYPosition)++"vh")), SvgA.rx "100", SvgA.ry "180", SvgA.fill "none", SvgA.stroke "black", SvgA.strokeWidth "10"] [],
                     line [SvgA.x1 (toString(first(model.one))++"vw"), SvgA.y1 (toString(second(model.one))++"vh"), SvgA.x2 (toString(first(model.one) + 25)++"vw"), SvgA.y2 (toString(second(model.two))++"vh"), SvgA.stroke "black", SvgA.strokeWidth "10"] [],
@@ -84,44 +91,52 @@ view model =
 -- UPDATE
 
 
+port requestRandom : Float -> Cmd msg
+
+port receiveRandom : (Float -> msg) -> Sub msg
+
+request x = (Request 0)
 
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg {circleYPosition, one, two, three, four, five, six, seven, time} = 
+update msg {circleYPosition, one, two, three, four, five, six, seven, time, rand} = 
          if first(one) < -25 then
                 ({
                     circleYPosition = circleYPosition,
-                    one = (125,abs(sin(time))*100),
+                    one = (125,rand),
                     two = two,
                     three = three,
                     four = four,
                     five = five,
                     six = six,
                     seven = seven,
-                    time = time
+                    time = time,
+                    rand = rand
                 }, Cmd.none)
         else if first(two) < -25 then
                 ({
                     circleYPosition = circleYPosition,
                     one = one,
-                    two = (125,abs(sin(time+1))*100),
+                    two = (125,rand),
                     three = three,
                     four = four,
                     five = five,
                     six = six,
                     seven = seven,
-                    time = time
+                    time = time,
+                    rand = rand
                 }, Cmd.none)
         else if first(three) < -25 then
                 ({
                     circleYPosition = circleYPosition,
                     one = one,
                     two = two,
-                    three = (125,abs(sin(time+2))*100),
+                    three = (125,rand),
                     four = four,
                     five = five,
                     six = six,
                     seven = seven,
-                    time = time
+                    time = time,
+                    rand = rand
                 }, Cmd.none)
 
         else if first(four) < -25 then
@@ -130,11 +145,12 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time} =
                     one = one,
                     two = two,
                     three = three,
-                    four = (125,abs(sin(time+3))*100),
+                    four = (125,rand),
                     five = five,
                     six = six,
                     seven = seven,
-                    time = time
+                    time = time,
+                    rand = rand
                 }, Cmd.none)
         else if first(five) < -25 then
                 ({
@@ -143,10 +159,11 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time} =
                     two = two,
                     three = three,
                     four = four,
-                    five = (125,abs(sin(time+4))*100),
+                    five = (125,rand),
                     six = six,
                     seven = seven,
-                    time = time
+                    time = time,
+                    rand = rand
                 }, Cmd.none)
         else if first(six) < -25 then
                 ({
@@ -156,9 +173,10 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time} =
                     three = three,
                     four = four,
                     five = five,
-                    six = (125,abs(sin(time+5))*100),
+                    six = (125,rand),
                     seven = seven,
-                    time = time
+                    time = time,
+                    rand = rand
                 }, Cmd.none)
         else if first(seven) < -25 then
                 ({
@@ -169,8 +187,9 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time} =
                     four = four,
                     five = five,
                     six = six,
-                    seven = (125, abs(sin(time+6))*100),
-                    time = time
+                    seven = (125, rand),
+                    time = time,
+                    rand = rand
                 }, Cmd.none)
         else
             case msg of
@@ -183,7 +202,8 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time} =
                         five = five,
                         six = six,
                         seven = seven,
-                        time = time
+                        time = time,
+                        rand = rand
                     }, Cmd.none)
                 (Tick _) -> ({
                         circleYPosition = circleYPosition + 0.05,
@@ -194,7 +214,8 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time} =
                         five = (first(five)-0.05, second(five)),
                         six = (first(six)-0.05, second(six)),
                         seven = (first(seven)-0.05, second(seven)),
-                        time = time
+                        time = time,
+                        rand = rand
                     }, Cmd.none)
                 (Tock _) -> ({
                         circleYPosition = circleYPosition,
@@ -205,7 +226,32 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time} =
                         five = five,
                         six = six,
                         seven = seven,
-                        time = time +1
+                        time = time +1,
+                        rand = rand
+                    }, requestRandom 0)
+                (Request a) -> ({
+                        circleYPosition = circleYPosition,
+                        one = one,
+                        two = two,
+                        three = three,
+                        four = four,
+                        five = five,
+                        six = six,
+                        seven = seven,
+                        time = time,
+                        rand = rand
+                    }, requestRandom a)
+                (Received a) -> ({
+                        circleYPosition = circleYPosition,
+                        one = one,
+                        two = two,
+                        three = three,
+                        four = four,
+                        five = five,
+                        six = six,
+                        seven = seven,
+                        time = time,
+                        rand = a
                     }, Cmd.none)
 
 
@@ -218,7 +264,8 @@ subscriptions model =
     [
         Mouse.clicks MouseMsg,
         Anim.times Tick,
-        Anim.times Tock
+        Anim.times Tock,
+        receiveRandom Received
     ]
 
 
