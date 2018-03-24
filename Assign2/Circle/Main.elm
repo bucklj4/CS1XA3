@@ -6,6 +6,7 @@ import Html.Attributes as HtmlA exposing (style, id)
 import Svg exposing (svg, ellipse, line, rect, g, circle)
 import Svg.Attributes as SvgA
 import Mouse
+import Keyboard
 import Time
 import AnimationFrame as Anim
 import Random
@@ -63,6 +64,7 @@ init =
 
 type Msg
     = MouseMsg Mouse.Position
+    | KeyMsg Keyboard.KeyCode
     | Tick Time.Time
     | Tock Time.Time
     | Request Float
@@ -84,40 +86,49 @@ view : Model -> Html Msg
 view model = 
             if model.collision == False
             then
-                div [style [("height", "100%"), ("width", "100%"), ("overflow", "hidden")]] 
+                div [style [("height", "100%"), ("width", "100%"), ("overflow", "hidden"), ("background", "-webkit-linear-gradient(to top, #f80759, #bc4e9c)"), ("background", "linear-gradient(to top, #f80759, #bc4e9c)") ]] 
                 
                 [
-                    p [style [("float", "left"), ("margin", "0")]] [text (toString(model.score))],
-                    p [style [("float", "right"), ("margin", "0")]] [text (toString((model.collision)))],
+                    audio [HtmlA.autoplay True, HtmlA.loop True] 
+                    [
+                        source [HtmlA.src "theme.mp3"] []
+                    ], 
+                    p [style [("float", "left"), ("margin", "0"), ("font-family", "Arial, Helvetica, sans-serif"), ("font-size", "5vmin"), ("color", "white")]] [text ("Score: " ++ toString(model.score))],
 
                     svg [id "svg", style [("height", "100%"), ("width", "100%")], onClick (Request 0)]
                     [
-                        ellipse [SvgA.cx "50%", (SvgA.cy (toString(model.circleYPosition)++"%")), SvgA.rx "100", SvgA.ry "180", SvgA.fill "none", SvgA.stroke "black", SvgA.strokeWidth "10"] [],
+                        ellipse [SvgA.cx "50%", (SvgA.cy (toString(model.circleYPosition)++"%")), SvgA.rx "100", SvgA.ry "180", SvgA.fill "none", SvgA.stroke "white", SvgA.strokeWidth "10"] [],
                         circle [id "upperHitCircle", SvgA.cx "50%", SvgA.cy (toString(toFloat(model.size.height)*0.01*model.circleYPosition-200)), SvgA.r "30", SvgA.fill "none"] [],
                         circle [id "lowerHitCircle", SvgA.cx "50%", SvgA.cy (toString(toFloat(model.size.height)*0.01*model.circleYPosition+200)), SvgA.r "30", SvgA.fill "none"] [],
 
                         g [id "track"] 
                         [
                             
-                            line [id "line1", SvgA.height "10", SvgA.x1 (toString(first(model.one))++"%"), SvgA.y1 (toString(second(model.one))++"%"), SvgA.x2 (toString(first(model.one) + 25)++"%"), SvgA.y2 (toString(second(model.two))++"%"), SvgA.stroke "black", SvgA.strokeWidth "10"] [],
-                            line [id "line2", SvgA.height "10", SvgA.x1 (toString(first(model.two))++"%"), SvgA.y1 (toString(second(model.two))++"%"), SvgA.x2 (toString(first(model.two) + 25)++"%"), SvgA.y2 (toString(second(model.three))++"%"), SvgA.stroke "black", SvgA.strokeWidth "10"] [],
-                            line [id "line3", SvgA.height "10", SvgA.x1 (toString(first(model.three))++"%"), SvgA.y1 (toString(second(model.three))++"%"), SvgA.x2 (toString(first(model.three) + 25)++"%"), SvgA.y2 (toString(second(model.four))++"%"), SvgA.stroke "black", SvgA.strokeWidth "10"] [],
-                            line [id "line4", SvgA.height "10", SvgA.x1 (toString(first(model.four))++"%"), SvgA.y1 (toString(second(model.four))++"%"), SvgA.x2 (toString(first(model.four) + 25)++"%"), SvgA.y2 (toString(second(model.five))++"%"), SvgA.stroke "black", SvgA.strokeWidth "10"] [],
-                            line [id "line5", SvgA.height "10", SvgA.x1 (toString(first(model.five))++"%"), SvgA.y1 (toString(second(model.five))++"%"), SvgA.x2 (toString(first(model.five) + 25)++"%"), SvgA.y2 (toString(second(model.six))++"%"), SvgA.stroke "black", SvgA.strokeWidth "10"] [],
-                            line [id "line6", SvgA.height "10", SvgA.x1 (toString(first(model.six))++"%"), SvgA.y1 (toString(second(model.six))++"%"), SvgA.x2 (toString(first(model.six) + 25)++"%"), SvgA.y2 (toString(second(model.one))++"%"), SvgA.stroke "black", SvgA.strokeWidth "10"] []
+                            line [id "line1", SvgA.height "10", SvgA.x1 (toString(first(model.one))++"%"), SvgA.y1 (toString(second(model.one))++"%"), SvgA.x2 (toString(first(model.one) + 25)++"%"), SvgA.y2 (toString(second(model.two))++"%"), SvgA.stroke "white", SvgA.strokeWidth "10"] [],
+                            line [id "line2", SvgA.height "10", SvgA.x1 (toString(first(model.two))++"%"), SvgA.y1 (toString(second(model.two))++"%"), SvgA.x2 (toString(first(model.two) + 25)++"%"), SvgA.y2 (toString(second(model.three))++"%"), SvgA.stroke "white", SvgA.strokeWidth "10"] [],
+                            line [id "line3", SvgA.height "10", SvgA.x1 (toString(first(model.three))++"%"), SvgA.y1 (toString(second(model.three))++"%"), SvgA.x2 (toString(first(model.three) + 25)++"%"), SvgA.y2 (toString(second(model.four))++"%"), SvgA.stroke "white", SvgA.strokeWidth "10"] [],
+                            line [id "line4", SvgA.height "10", SvgA.x1 (toString(first(model.four))++"%"), SvgA.y1 (toString(second(model.four))++"%"), SvgA.x2 (toString(first(model.four) + 25)++"%"), SvgA.y2 (toString(second(model.five))++"%"), SvgA.stroke "white", SvgA.strokeWidth "10"] [],
+                            line [id "line5", SvgA.height "10", SvgA.x1 (toString(first(model.five))++"%"), SvgA.y1 (toString(second(model.five))++"%"), SvgA.x2 (toString(first(model.five) + 25)++"%"), SvgA.y2 (toString(second(model.six))++"%"), SvgA.stroke "white", SvgA.strokeWidth "10"] [],
+                            line [id "line6", SvgA.height "10", SvgA.x1 (toString(first(model.six))++"%"), SvgA.y1 (toString(second(model.six))++"%"), SvgA.x2 (toString(first(model.six) + 25)++"%"), SvgA.y2 (toString(second(model.one))++"%"), SvgA.stroke "white", SvgA.strokeWidth "10"] []
                           
                         ]
                     ]
                 ]
             else
-                div [style [("height", "100%"), ("width", "100%"), ("overflow", "hidden")]] 
+                div [style [("height", "100%"), ("width", "100%"), ("overflow", "hidden"), ("text-align", "center"), ("background", "-webkit-linear-gradient(to top, #f80759, #bc4e9c)"), ("background", "linear-gradient(to top, #f80759, #bc4e9c)"), ("color", "white")]] 
                 [
+                
                     h1 [] [text "Game Over!"],
                     h2 [] [text ("Your score was " ++ toString(model.score))],
                     br [] [],
                     a [HtmlA.href "./index.html"]
                     [
                         button [] [text "Play again!"]
+                    ],
+
+                     audio [id "audio2", HtmlA.autoplay True] 
+                    [
+                        source [HtmlA.src "lose.mp3"] []
                     ]
 
                 ]
@@ -269,6 +280,21 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time, rand
                         size = size,
                         score = score +1
                     }, Cmd.none)
+                (KeyMsg _) -> ({
+                        circleYPosition = circleYPosition - 10,
+                        one = one,
+                        two = two,
+                        three = three,
+                        four = four,
+                        five = five,
+                        six = six,
+                        seven = seven,
+                        time = time,
+                        rand = rand,
+                        collision = collision,
+                        size = size,
+                        score = score +1
+                    }, Cmd.none)
                 (Tick _) -> ({
                         circleYPosition = circleYPosition + 0.3,
                         one = (first(one)-0.3, second(one)),
@@ -399,6 +425,7 @@ subscriptions model =
     Sub.batch 
     [
         Mouse.clicks MouseMsg,
+        Keyboard.downs KeyMsg,
         Anim.times Tick,
         Time.every Time.second Tock,
         receiveRandom Received,

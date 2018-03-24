@@ -194,6 +194,12 @@ var _user$project$App$update = F2(
 												_0: {circleYPosition: _p3 - 10, one: _p7, two: _p15, three: _p13, four: _p6, five: _p5, six: _p11, seven: _p10, time: _p14, rand: _p8, collision: _p4, size: _p12, score: _p9 + 1},
 												_1: _elm_lang$core$Platform_Cmd$none
 											};
+										case 'KeyMsg':
+											return {
+												ctor: '_Tuple2',
+												_0: {circleYPosition: _p3 - 10, one: _p7, two: _p15, three: _p13, four: _p6, five: _p5, six: _p11, seven: _p10, time: _p14, rand: _p8, collision: _p4, size: _p12, score: _p9 + 1},
+												_1: _elm_lang$core$Platform_Cmd$none
+											};
 										case 'Tick':
 											return {
 												ctor: '_Tuple2',
@@ -371,7 +377,15 @@ var _user$project$App$view = function (model) {
 						_1: {
 							ctor: '::',
 							_0: {ctor: '_Tuple2', _0: 'overflow', _1: 'hidden'},
-							_1: {ctor: '[]'}
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'background', _1: '-webkit-linear-gradient(to top, #f80759, #bc4e9c)'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'background', _1: 'linear-gradient(to top, #f80759, #bc4e9c)'},
+									_1: {ctor: '[]'}
+								}
+							}
 						}
 					}
 				}),
@@ -380,25 +394,26 @@ var _user$project$App$view = function (model) {
 		{
 			ctor: '::',
 			_0: A2(
-				_elm_lang$html$Html$p,
+				_elm_lang$html$Html$audio,
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$style(
-						{
-							ctor: '::',
-							_0: {ctor: '_Tuple2', _0: 'float', _1: 'left'},
-							_1: {
-								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 'margin', _1: '0'},
-								_1: {ctor: '[]'}
-							}
-						}),
-					_1: {ctor: '[]'}
+					_0: _elm_lang$html$Html_Attributes$autoplay(true),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$loop(true),
+						_1: {ctor: '[]'}
+					}
 				},
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html$text(
-						_elm_lang$core$Basics$toString(model.score)),
+					_0: A2(
+						_elm_lang$html$Html$source,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$src('theme.mp3'),
+							_1: {ctor: '[]'}
+						},
+						{ctor: '[]'}),
 					_1: {ctor: '[]'}
 				}),
 			_1: {
@@ -410,11 +425,23 @@ var _user$project$App$view = function (model) {
 						_0: _elm_lang$html$Html_Attributes$style(
 							{
 								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 'float', _1: 'right'},
+								_0: {ctor: '_Tuple2', _0: 'float', _1: 'left'},
 								_1: {
 									ctor: '::',
 									_0: {ctor: '_Tuple2', _0: 'margin', _1: '0'},
-									_1: {ctor: '[]'}
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'font-family', _1: 'Arial, Helvetica, sans-serif'},
+										_1: {
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: 'font-size', _1: '5vmin'},
+											_1: {
+												ctor: '::',
+												_0: {ctor: '_Tuple2', _0: 'color', _1: 'white'},
+												_1: {ctor: '[]'}
+											}
+										}
+									}
 								}
 							}),
 						_1: {ctor: '[]'}
@@ -422,7 +449,10 @@ var _user$project$App$view = function (model) {
 					{
 						ctor: '::',
 						_0: _elm_lang$html$Html$text(
-							_elm_lang$core$Basics$toString(model.collision)),
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								'Score: ',
+								_elm_lang$core$Basics$toString(model.score))),
 						_1: {ctor: '[]'}
 					}),
 				_1: {
@@ -477,7 +507,7 @@ var _user$project$App$view = function (model) {
 													_0: _elm_lang$svg$Svg_Attributes$fill('none'),
 													_1: {
 														ctor: '::',
-														_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+														_0: _elm_lang$svg$Svg_Attributes$stroke('white'),
 														_1: {
 															ctor: '::',
 															_0: _elm_lang$svg$Svg_Attributes$strokeWidth('10'),
@@ -599,7 +629,7 @@ var _user$project$App$view = function (model) {
 																					'%')),
 																			_1: {
 																				ctor: '::',
-																				_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+																				_0: _elm_lang$svg$Svg_Attributes$stroke('white'),
 																				_1: {
 																					ctor: '::',
 																					_0: _elm_lang$svg$Svg_Attributes$strokeWidth('10'),
@@ -657,7 +687,7 @@ var _user$project$App$view = function (model) {
 																						'%')),
 																				_1: {
 																					ctor: '::',
-																					_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+																					_0: _elm_lang$svg$Svg_Attributes$stroke('white'),
 																					_1: {
 																						ctor: '::',
 																						_0: _elm_lang$svg$Svg_Attributes$strokeWidth('10'),
@@ -715,7 +745,7 @@ var _user$project$App$view = function (model) {
 																							'%')),
 																					_1: {
 																						ctor: '::',
-																						_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+																						_0: _elm_lang$svg$Svg_Attributes$stroke('white'),
 																						_1: {
 																							ctor: '::',
 																							_0: _elm_lang$svg$Svg_Attributes$strokeWidth('10'),
@@ -773,7 +803,7 @@ var _user$project$App$view = function (model) {
 																								'%')),
 																						_1: {
 																							ctor: '::',
-																							_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+																							_0: _elm_lang$svg$Svg_Attributes$stroke('white'),
 																							_1: {
 																								ctor: '::',
 																								_0: _elm_lang$svg$Svg_Attributes$strokeWidth('10'),
@@ -831,7 +861,7 @@ var _user$project$App$view = function (model) {
 																									'%')),
 																							_1: {
 																								ctor: '::',
-																								_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+																								_0: _elm_lang$svg$Svg_Attributes$stroke('white'),
 																								_1: {
 																									ctor: '::',
 																									_0: _elm_lang$svg$Svg_Attributes$strokeWidth('10'),
@@ -889,7 +919,7 @@ var _user$project$App$view = function (model) {
 																										'%')),
 																								_1: {
 																									ctor: '::',
-																									_0: _elm_lang$svg$Svg_Attributes$stroke('black'),
+																									_0: _elm_lang$svg$Svg_Attributes$stroke('white'),
 																									_1: {
 																										ctor: '::',
 																										_0: _elm_lang$svg$Svg_Attributes$strokeWidth('10'),
@@ -932,7 +962,23 @@ var _user$project$App$view = function (model) {
 						_1: {
 							ctor: '::',
 							_0: {ctor: '_Tuple2', _0: 'overflow', _1: 'hidden'},
-							_1: {ctor: '[]'}
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'text-align', _1: 'center'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'background', _1: '-webkit-linear-gradient(to top, #f80759, #bc4e9c)'},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'background', _1: 'linear-gradient(to top, #f80759, #bc4e9c)'},
+										_1: {
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: 'color', _1: 'white'},
+											_1: {ctor: '[]'}
+										}
+									}
+								}
+							}
 						}
 					}
 				}),
@@ -989,7 +1035,33 @@ var _user$project$App$view = function (model) {
 									}),
 								_1: {ctor: '[]'}
 							}),
-						_1: {ctor: '[]'}
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$audio,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$id('audio2'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$autoplay(true),
+										_1: {ctor: '[]'}
+									}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$source,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$src('lose.mp3'),
+											_1: {ctor: '[]'}
+										},
+										{ctor: '[]'}),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
 					}
 				}
 			}
@@ -1004,6 +1076,9 @@ var _user$project$App$Tock = function (a) {
 var _user$project$App$Tick = function (a) {
 	return {ctor: 'Tick', _0: a};
 };
+var _user$project$App$KeyMsg = function (a) {
+	return {ctor: 'KeyMsg', _0: a};
+};
 var _user$project$App$MouseMsg = function (a) {
 	return {ctor: 'MouseMsg', _0: a};
 };
@@ -1014,17 +1089,21 @@ var _user$project$App$subscriptions = function (model) {
 			_0: _elm_lang$mouse$Mouse$clicks(_user$project$App$MouseMsg),
 			_1: {
 				ctor: '::',
-				_0: _elm_lang$animation_frame$AnimationFrame$times(_user$project$App$Tick),
+				_0: _elm_lang$keyboard$Keyboard$downs(_user$project$App$KeyMsg),
 				_1: {
 					ctor: '::',
-					_0: A2(_elm_lang$core$Time$every, _elm_lang$core$Time$second, _user$project$App$Tock),
+					_0: _elm_lang$animation_frame$AnimationFrame$times(_user$project$App$Tick),
 					_1: {
 						ctor: '::',
-						_0: _user$project$App$receiveRandom(_user$project$App$Received),
+						_0: A2(_elm_lang$core$Time$every, _elm_lang$core$Time$second, _user$project$App$Tock),
 						_1: {
 							ctor: '::',
-							_0: _user$project$App$receiveCheck(_user$project$App$ReceivedCollision),
-							_1: {ctor: '[]'}
+							_0: _user$project$App$receiveRandom(_user$project$App$Received),
+							_1: {
+								ctor: '::',
+								_0: _user$project$App$receiveCheck(_user$project$App$ReceivedCollision),
+								_1: {ctor: '[]'}
+							}
 						}
 					}
 				}
