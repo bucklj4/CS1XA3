@@ -10,7 +10,7 @@ import Keyboard
 import Time
 import AnimationFrame as Anim
 import Random
-import Basics exposing (sin, abs)
+import Basics exposing (sin, abs, e)
 import Tuple exposing (first,second)
 import Array
 import Window
@@ -28,7 +28,6 @@ type alias Model =
         four : (Float,Float),
         five : (Float,Float),
         six : (Float,Float),
-        seven : (Float, Float),
         time : Float,
         rand : Float,
         collision : Bool,
@@ -46,8 +45,7 @@ init =
         three = (50,40),
         four = (75,75),
         five = (100,30),
-        six = (125,50),
-        seven = (150,20),
+        six = (125,30),
         time = 0,
         rand = 0, 
         collision = False,
@@ -67,12 +65,11 @@ type Msg
     | KeyMsg Keyboard.KeyCode
     | Tick Time.Time
     | Tock Time.Time
-    | Request Float
-    | Received Float
+    | RequestRandom Float
+    | ReceivedRandom Float
     | RequestCollision Float
     | ReceivedCollision Bool
     | Size Window.Size
-    | UpdateScore
 
 
 
@@ -86,16 +83,17 @@ view : Model -> Html Msg
 view model = 
             if model.collision == False
             then
-                div [style [("height", "100%"), ("width", "100%"), ("overflow", "hidden"), ("background", "-webkit-linear-gradient(to top, #f80759, #bc4e9c)"), ("background", "linear-gradient(to top, #f80759, #bc4e9c)") ]] 
+                if 
+                div [style [("height", "100%"), ("width", "100%"), ("overflow", "hidden"), ("background", "linear-gradient(to top, #f80759, #bc4e9c)") ]] 
                 
                 [
                     audio [HtmlA.autoplay True, HtmlA.loop True] 
                     [
                         source [HtmlA.src "theme.mp3"] []
                     ], 
-                    p [style [("float", "left"), ("margin", "0"), ("font-family", "Arial, Helvetica, sans-serif"), ("font-size", "5vmin"), ("color", "white")]] [text ("Score: " ++ toString(model.score))],
+                    p [style [("float", "left"), ("margin", "0"), ("font-family", "Arial, Helvetica, sans-serif"), ("font-size", "5vmin"), ("color", "white"), ("position", "fixed")]] [text ("Score: " ++ toString(model.score))],
 
-                    svg [id "svg", style [("height", "100%"), ("width", "100%")], onClick (Request 0)]
+                    svg [id "svg", style [("height", "100%"), ("width", "100%")], onClick (RequestRandom 0)]
                     [
                         ellipse [SvgA.cx "50%", (SvgA.cy (toString(model.circleYPosition)++"%")), SvgA.rx "100", SvgA.ry "180", SvgA.fill "none", SvgA.stroke "white", SvgA.strokeWidth "10"] [],
                         circle [id "upperHitCircle", SvgA.cx "50%", SvgA.cy (toString(toFloat(model.size.height)*0.01*model.circleYPosition-200)), SvgA.r "30", SvgA.fill "none"] [],
@@ -104,12 +102,12 @@ view model =
                         g [id "track"] 
                         [
                             
-                            line [id "line1", SvgA.height "10", SvgA.x1 (toString(first(model.one))++"%"), SvgA.y1 (toString(second(model.one))++"%"), SvgA.x2 (toString(first(model.one) + 25)++"%"), SvgA.y2 (toString(second(model.two))++"%"), SvgA.stroke "white", SvgA.strokeWidth "10"] [],
-                            line [id "line2", SvgA.height "10", SvgA.x1 (toString(first(model.two))++"%"), SvgA.y1 (toString(second(model.two))++"%"), SvgA.x2 (toString(first(model.two) + 25)++"%"), SvgA.y2 (toString(second(model.three))++"%"), SvgA.stroke "white", SvgA.strokeWidth "10"] [],
-                            line [id "line3", SvgA.height "10", SvgA.x1 (toString(first(model.three))++"%"), SvgA.y1 (toString(second(model.three))++"%"), SvgA.x2 (toString(first(model.three) + 25)++"%"), SvgA.y2 (toString(second(model.four))++"%"), SvgA.stroke "white", SvgA.strokeWidth "10"] [],
-                            line [id "line4", SvgA.height "10", SvgA.x1 (toString(first(model.four))++"%"), SvgA.y1 (toString(second(model.four))++"%"), SvgA.x2 (toString(first(model.four) + 25)++"%"), SvgA.y2 (toString(second(model.five))++"%"), SvgA.stroke "white", SvgA.strokeWidth "10"] [],
-                            line [id "line5", SvgA.height "10", SvgA.x1 (toString(first(model.five))++"%"), SvgA.y1 (toString(second(model.five))++"%"), SvgA.x2 (toString(first(model.five) + 25)++"%"), SvgA.y2 (toString(second(model.six))++"%"), SvgA.stroke "white", SvgA.strokeWidth "10"] [],
-                            line [id "line6", SvgA.height "10", SvgA.x1 (toString(first(model.six))++"%"), SvgA.y1 (toString(second(model.six))++"%"), SvgA.x2 (toString(first(model.six) + 25)++"%"), SvgA.y2 (toString(second(model.one))++"%"), SvgA.stroke "white", SvgA.strokeWidth "10"] []
+                            line [id "line1", SvgA.height "10", SvgA.x1 (toString(first(model.one))++"%"), SvgA.y1 (toString(second(model.one))++"%"), SvgA.x2 (toString(first(model.one)+25)++"%"), SvgA.y2 (toString(second(model.two))++"%"), SvgA.stroke "white", SvgA.strokeWidth "10"] [],
+                            line [id "line2", SvgA.height "10", SvgA.x1 (toString(first(model.two))++"%"), SvgA.y1 (toString(second(model.two))++"%"), SvgA.x2 (toString(first(model.two)+25)++"%"), SvgA.y2 (toString(second(model.three))++"%"), SvgA.stroke "white", SvgA.strokeWidth "10"] [],
+                            line [id "line3", SvgA.height "10", SvgA.x1 (toString(first(model.three))++"%"), SvgA.y1 (toString(second(model.three))++"%"), SvgA.x2 (toString(first(model.three)+25)++"%"), SvgA.y2 (toString(second(model.four))++"%"), SvgA.stroke "white", SvgA.strokeWidth "10"] [],
+                            line [id "line4", SvgA.height "10", SvgA.x1 (toString(first(model.four))++"%"), SvgA.y1 (toString(second(model.four))++"%"), SvgA.x2 (toString(first(model.four)+25)++"%"), SvgA.y2 (toString(second(model.five))++"%"), SvgA.stroke "white", SvgA.strokeWidth "10"] [],
+                            line [id "line5", SvgA.height "10", SvgA.x1 (toString(first(model.five))++"%"), SvgA.y1 (toString(second(model.five))++"%"), SvgA.x2 (toString(first(model.five)+25)++"%"), SvgA.y2 (toString(second(model.six))++"%"), SvgA.stroke "white", SvgA.strokeWidth "10"] [],
+                            line [id "line6", SvgA.height "10", SvgA.x1 (toString(first(model.six))++"%"), SvgA.y1 (toString(second(model.six))++"%"), SvgA.x2 (toString(first(model.six)+25)++"%"), SvgA.y2 (toString(second(model.one))++"%"), SvgA.stroke "white", SvgA.strokeWidth "10"] []
                           
                         ]
                     ]
@@ -146,11 +144,9 @@ port requestCheck : Float -> Cmd msg
 
 port receiveCheck : (Bool -> msg) -> Sub msg
 
-request x = (Request 0)
-
 update : Msg -> Model -> ( Model, Cmd Msg )
-update msg {circleYPosition, one, two, three, four, five, six, seven, time, rand, collision, size, score} = 
-         if first(one) < -25 then
+update msg {circleYPosition, one, two, three, four, five, six, time, rand, collision, size, score} = 
+         if first(one) <= -25 then
                 ({
                     circleYPosition = circleYPosition,
                     one = (125,rand),
@@ -159,14 +155,13 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time, rand
                     four = four,
                     five = five,
                     six = six,
-                    seven = seven,
                     time = time,
                     rand = rand,
                     collision = collision,
                     size = size,
                     score = score
                 }, Cmd.none)
-        else if first(two) < -25 then
+        else if first(two) <= -25 then
                 ({
                     circleYPosition = circleYPosition,
                     one = one,
@@ -175,14 +170,13 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time, rand
                     four = four,
                     five = five,
                     six = six,
-                    seven = seven,
                     time = time,
                     rand = rand,
                     collision = collision,
                     size = size,
                     score = score
                 }, Cmd.none)
-        else if first(three) < -25 then
+        else if first(three) <= -25 then
                 ({
                     circleYPosition = circleYPosition,
                     one = one,
@@ -191,7 +185,6 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time, rand
                     four = four,
                     five = five,
                     six = six,
-                    seven = seven,
                     time = time,
                     rand = rand,
                     collision = collision,
@@ -199,7 +192,7 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time, rand
                     score = score
                 }, Cmd.none)
 
-        else if first(four) < -25 then
+        else if first(four) <= -25 then
                 ({
                     circleYPosition = circleYPosition,
                     one = one,
@@ -208,14 +201,13 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time, rand
                     four = (125,rand),
                     five = five,
                     six = six,
-                    seven = seven,
                     time = time,
                     rand = rand,
                     collision = collision,
                     size = size,
                     score = score
                 }, Cmd.none)
-        else if first(five) < -25 then
+        else if first(five) <= -25 then
                 ({
                     circleYPosition = circleYPosition,
                     one = one,
@@ -224,14 +216,13 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time, rand
                     four = four,
                     five = (125,rand),
                     six = six,
-                    seven = seven,
                     time = time,
                     rand = rand,
                     collision = collision,
                     size = size,
                     score = score
                 }, Cmd.none)
-        else if first(six) < -25 then
+        else if first(six) <= -25 then
                 ({
                     circleYPosition = circleYPosition,
                     one = one,
@@ -240,23 +231,6 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time, rand
                     four = four,
                     five = five,
                     six = (125,rand),
-                    seven = seven,
-                    time = time,
-                    rand = rand,
-                    collision = collision,
-                    size = size,
-                    score = score
-                }, Cmd.none)
-        else if first(seven) < -25 then
-                ({
-                    circleYPosition = circleYPosition,
-                    one = one,
-                    two = two,
-                    three = three,
-                    four = four,
-                    five = five,
-                    six = six,
-                    seven = (125, rand),
                     time = time,
                     rand = rand,
                     collision = collision,
@@ -264,157 +238,136 @@ update msg {circleYPosition, one, two, three, four, five, six, seven, time, rand
                     score = score
                 }, Cmd.none)
         else
-            case msg of
-                (MouseMsg _) -> ({
-                        circleYPosition = circleYPosition - 10,
-                        one = one,
-                        two = two,
-                        three = three,
-                        four = four,
-                        five = five,
-                        six = six,
-                        seven = seven,
-                        time = time,
-                        rand = rand,
-                        collision = collision,
-                        size = size,
-                        score = score +1
-                    }, Cmd.none)
-                (KeyMsg _) -> ({
-                        circleYPosition = circleYPosition - 10,
-                        one = one,
-                        two = two,
-                        three = three,
-                        four = four,
-                        five = five,
-                        six = six,
-                        seven = seven,
-                        time = time,
-                        rand = rand,
-                        collision = collision,
-                        size = size,
-                        score = score +1
-                    }, Cmd.none)
-                (Tick _) -> ({
-                        circleYPosition = circleYPosition + 0.3,
-                        one = (first(one)-0.3, second(one)),
-                        two = (first(two)-0.3, second(two)),
-                        three = (first(three)-0.3, second(three)),
-                        four = (first(four)-0.3, second(four)),
-                        five = (first(five)-0.3, second(five)),
-                        six = (first(six)-0.3, second(six)),
-                        seven = (first(seven)-0.3, second(seven)),
-                        time = time,
-                        rand = rand,
-                        collision = collision,
-                        size = size,
-                        score = score
-                    }, requestCheck 0)
-                (Tock _) -> ({
-                        circleYPosition = circleYPosition,
-                        one = one,
-                        two = two,
-                        three = three,
-                        four = four,
-                        five = five,
-                        six = six,
-                        seven = seven,
-                        time = time +1,
-                        rand = rand,
-                        collision = collision,
-                        size = size,
-                        score = score
-                    }, requestRandom 0)
-                (Request a) -> ({
-                        circleYPosition = circleYPosition,
-                        one = one,
-                        two = two,
-                        three = three,
-                        four = four,
-                        five = five,
-                        six = six,
-                        seven = seven,
-                        time = time,
-                        rand = rand,
-                        collision = collision,
-                        size = size,
-                        score = score
-                    }, requestRandom a)
-                (Received a) -> ({
-                        circleYPosition = circleYPosition,
-                        one = one,
-                        two = two,
-                        three = three,
-                        four = four,
-                        five = five,
-                        six = six,
-                        seven = seven,
-                        time = time,
-                        rand = a,
-                        collision = collision,
-                        size = size,
-                        score = score
-                    }, Cmd.none)
-                (RequestCollision a) -> ({
-                        circleYPosition = circleYPosition,
-                        one = one,
-                        two = two,
-                        three = three,
-                        four = four,
-                        five = five,
-                        six = six,
-                        seven = seven,
-                        time = time,
-                        rand = rand,
-                        collision = collision,
-                        size = size,
-                        score = score
-                    }, requestCheck a)
-                (ReceivedCollision a) -> ({
-                        circleYPosition = circleYPosition,
-                        one = one,
-                        two = two,
-                        three = three,
-                        four = four,
-                        five = five,
-                        six = six,
-                        seven = seven,
-                        time = time,
-                        rand = rand,
-                        collision = a,
-                        size = size,
-                        score = score
-                    }, Cmd.none)
-                (Size a) -> ({
-                        circleYPosition = circleYPosition,
-                        one = one,
-                        two = two,
-                        three = three,
-                        four = four,
-                        five = five,
-                        six = six,
-                        seven = seven,
-                        time = time,
-                        rand = rand,
-                        collision = collision,
-                        size = a,
-                        score = score
-                    }, Cmd.none)
-                (UpdateScore) -> ({
-                        circleYPosition = circleYPosition,
-                        one = one,
-                        two = two,
-                        three = three,
-                        four = four,
-                        five = five,
-                        six = six,
-                        seven = seven,
-                        time = time,
-                        rand = rand,
-                        collision = collision,
-                        size = size,
-                        score = score + 1
-                    }, Cmd.none)
+            let displacement = 0.3
+                jump = 15
+            in
+                case msg of
+                    (MouseMsg _) -> ({
+                            circleYPosition = circleYPosition - jump,
+                            one = one,
+                            two = two,
+                            three = three,
+                            four = four,
+                            five = five,
+                            six = six,
+                            time = time,
+                            rand = rand,
+                            collision = collision,
+                            size = size,
+                            score = score +1
+                        }, Cmd.none)
+                    (KeyMsg _) -> ({
+                            circleYPosition = circleYPosition - jump,
+                            one = one,
+                            two = two,
+                            three = three,
+                            four = four,
+                            five = five,
+                            six = six,
+                            time = time,
+                            rand = rand,
+                            collision = collision,
+                            size = size,
+                            score = score +1
+                        }, Cmd.none)
+                    (Tick _) -> ({
+                            circleYPosition = circleYPosition + displacement,
+                            one = (first(one)-displacement, second(one)),
+                            two = (first(two)-displacement, second(two)),
+                            three = (first(three)-displacement, second(three)),
+                            four = (first(four)-displacement, second(four)),
+                            five = (first(five)-displacement, second(five)),
+                            six = (first(six)-displacement, second(six)),
+                            time = time,
+                            rand = rand,
+                            collision = collision,
+                            size = size,
+                            score = score
+                        }, requestCheck 0)
+                    (Tock _) -> ({
+                            circleYPosition = circleYPosition,
+                            one = one,
+                            two = two,
+                            three = three,
+                            four = four,
+                            five = five,
+                            six = six,
+                            time = time +1,
+                            rand = rand,
+                            collision = collision,
+                            size = size,
+                            score = score
+                        }, requestRandom 0)
+                    (RequestRandom a) -> ({
+                            circleYPosition = circleYPosition,
+                            one = one,
+                            two = two,
+                            three = three,
+                            four = four,
+                            five = five,
+                            six = six,
+                            time = time,
+                            rand = rand,
+                            collision = collision,
+                            size = size,
+                            score = score
+                        }, requestRandom a)
+                    (ReceivedRandom a) -> ({
+                            circleYPosition = circleYPosition,
+                            one = one,
+                            two = two,
+                            three = three,
+                            four = four,
+                            five = five,
+                            six = six,
+                            time = time,
+                            rand = a,
+                            collision = collision,
+                            size = size,
+                            score = score
+                        }, Cmd.none)
+                    (RequestCollision a) -> ({
+                            circleYPosition = circleYPosition,
+                            one = one,
+                            two = two,
+                            three = three,
+                            four = four,
+                            five = five,
+                            six = six,
+                            time = time,
+                            rand = rand,
+                            collision = collision,
+                            size = size,
+                            score = score
+                        }, requestCheck a)
+                    (ReceivedCollision a) -> ({
+                            circleYPosition = circleYPosition,
+                            one = one,
+                            two = two,
+                            three = three,
+                            four = four,
+                            five = five,
+                            six = six,
+                            time = time,
+                            rand = rand,
+                            collision = a,
+                            size = size,
+                            score = score
+                        }, Cmd.none)
+                    (Size a) -> ({
+                            circleYPosition = circleYPosition,
+                            one = one,
+                            two = two,
+                            three = three,
+                            four = four,
+                            five = five,
+                            six = six,
+                            time = time,
+                            rand = rand,
+                            collision = collision,
+                            size = a,
+                            score = score
+                        }, Cmd.none)
 
 
 -- SUBSCRIPTIONS
@@ -428,7 +381,7 @@ subscriptions model =
         Keyboard.downs KeyMsg,
         Anim.times Tick,
         Time.every Time.second Tock,
-        receiveRandom Received,
+        receiveRandom ReceivedRandom,
         receiveCheck ReceivedCollision
     ]
 
