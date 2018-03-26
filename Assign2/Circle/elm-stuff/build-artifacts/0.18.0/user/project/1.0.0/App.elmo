@@ -335,12 +335,8 @@ var _user$project$App$view = function (model) {
 							_0: {ctor: '_Tuple2', _0: 'overflow', _1: 'hidden'},
 							_1: {
 								ctor: '::',
-								_0: {ctor: '_Tuple2', _0: 'background', _1: '-webkit-linear-gradient(to top, #f80759, #bc4e9c)'},
-								_1: {
-									ctor: '::',
-									_0: {ctor: '_Tuple2', _0: 'background', _1: 'linear-gradient(to top, #f80759, #bc4e9c)'},
-									_1: {ctor: '[]'}
-								}
+								_0: {ctor: '_Tuple2', _0: 'background', _1: 'linear-gradient(to top, #f80759, #bc4e9c)'},
+								_1: {ctor: '[]'}
 							}
 						}
 					}
@@ -980,7 +976,7 @@ var _user$project$App$view = function (model) {
 							_elm_lang$html$Html$a,
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$href('./index.html'),
+								_0: _elm_lang$html$Html_Attributes$href('./main.html'),
 								_1: {ctor: '[]'}
 							},
 							{

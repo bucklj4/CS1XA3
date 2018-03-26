@@ -83,7 +83,6 @@ view : Model -> Html Msg
 view model = 
             if model.collision == False
             then
-                if 
                 div [style [("height", "100%"), ("width", "100%"), ("overflow", "hidden"), ("background", "linear-gradient(to top, #f80759, #bc4e9c)") ]] 
                 
                 [
@@ -119,7 +118,7 @@ view model =
                     h1 [] [text "Game Over!"],
                     h2 [] [text ("Your score was " ++ toString(model.score))],
                     br [] [],
-                    a [HtmlA.href "./index.html"]
+                    a [HtmlA.href "./main.html"]
                     [
                         button [] [text "Play again!"]
                     ],
