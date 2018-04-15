@@ -135,6 +135,28 @@ To harness the real power of this library, one should remember that the values o
 eval (Map.fromList [("x", 2)]) $ partDiff "x" $ parseExprD "1/x"
 >>> -0.25
 ```
+## Bonus Features
+### Graphing
+The file `Graphing.hs` includes the function `graph` which takes 4 arguments:
+(1) The variable to which respect is given 
+(2) The left value of the domain 
+(3) The right value of the domain 
+(4) The encoded mathematical expression to be plotted
+
+The function produces an HTML file called graph.HTML in the same directory as `Graphing.hs` that can be opened to reveal the function plotted on its domain in SVG graphics!
+
+```haskell 
+graph "x" (-5) (5) $ parseExprD "sin(x)"
+```
+This code yields the following graph in an HTML page:
+<img src="./graph.svg"/>
+
+```haskell
+graph "x" (-20) (20) $ parseExprD "ln(e^(x))"
+```
+Likewise, this code yields:
+<img src="./graph2.svg"/>
+
 ## Built With
 
 * [Parsec Expr](https://hackage.haskell.org/package/parsec-3.1.13.0/docs/Text-Parsec-Expr.html) - The parsing framework
