@@ -43,13 +43,19 @@ The following mathematical functions are encoded in the library:
 
 ((Expression !/ (Expression))         -- Infix notation for division
 
-((Sin (Expression))                   -- Applies an expression to the sine function
+(Sin (Expression))                    -- Applies an expression to the sine function
 
-((Cos (Expression))                   -- Applies an expression to the cosine function
+(Cos (Expression))                    -- Applies an expression to the cosine function
 
-((Exp (Expression))                   -- Applies an expression to the natural exponential function
+(Tan (Expression))                    -- Applies an expression to the tangent function
 
-((Log (Expression))                   -- Applies an expression to the natural logarithm function
+(Exp (Expression))                    -- Applies an expression to the natural exponential function
+
+(Log (Expression))                    -- Applies an expression to the natural logarithm function
+
+(Power (Expression) (Expression))     -- Applies an expression to an exponent of another expression
+
+((Expression) !^ (Expression))        -- Infix notation for powers
 ```
 ### Core Functionality
 The two core functions of the library are `simplify` and `eval`. The functions take the same two parameters:
@@ -57,7 +63,7 @@ The two core functions of the library are `simplify` and `eval`. The functions t
   ```haskell
   (Map.fromList [("x", 19), ("y", 98)]) -- Variable "x" will be given a value of 19 and "y" a value of 98
   
-  (Map.fromList []) -- If we do not wish to substitute any variables (only allowed on simplify)
+  (Map.fromList []) -- If we do not wish to substitute any variables
   ```
   * An encoded mathematical expression:
   ```haskell
@@ -65,7 +71,10 @@ The two core functions of the library are `simplify` and `eval`. The functions t
   ((Add (Mult (Const 9) (Mult (Var "x") (Var "x"))) (Add (Mult (Const 8) (Var "x")) (Const 2))))
   
   -- The same expression using infix notation
-  (((val 9)) !* (((var "x")) !* ((var "x")))) !+ ((((val 8)) !* ((var "x"))) !+ ((val 2)))
+  (((Const 9)) !* (((Var "x")) !* ((Var "x")))) !+ ((((Const 8)) !* ((Var "x"))) !+ ((Const 2)))
+  
+  -- The same expression using infix notation with powers
+  (((Const 9) !* (Var "x")) !^ (Const 2)) !+ ((Const 8) !* (Var "x")) !+ (Const 2)
   ```
   
   #### Simplify
@@ -100,9 +109,12 @@ eval (Map.fromList [("x", 5)]) ((Var "x")  !+ (Var "y") !+ (Const 2) !+ (Const 3
   "y * -5.5" >> (Mult (Var "y") (Const (-5.5)))
   "x / y" >> (Div (Var "x") (Var "y"))
   "sin(x)" >> (Sin (Var "x")) -- input MUST be wrapped in parantheses, no whitespace between paranthesis and function
-  "cos(5 + -3)" >> (Cos (Add (Const 5) (Const (-3)))) 
+  "cos(5 + -3)" >> (Cos (Add (Const 5) (Const (-3))))
+  "tan(x)" >> (Tan (Var "x"))
   "e^(x)" >> (Exp (Var "x"))
   "ln(ln(x))" >> (Log (Log (Var "x")))
+  "2*x ^ 2" >> (Mult (Const 2) (Power (Var "x") (Const 2)))
+  "(2*x)^2" >> (Power (Parens (Mult (Const 2) (Var "x"))) (Const 2))
   "2 + 5 * -3" >> (Add (Const 2) (Parens (Mult (Const 5) (Const (-3))))) -- BEDMAS is observed
   ```
 #### parseExprD
