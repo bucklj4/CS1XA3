@@ -119,7 +119,9 @@ parseExprF "2 + -0.999999999999999"
 ```
 
 ## Partial Diffentiation
-The function `partDiff` takes two arguments: (1) A string of the variable to which respect is given (2) The expression to be differentiated.
+The function `partDiff` takes two arguments: 
+(1) A string of the variable to which respect is given
+(2) The expression to be differentiated.
 ```haskell
 partDiff "x" (Div (Const 1) (Var "x"))
 >>> ((val -1.0)) !/ (((var "x")) !* ((var "x")))
