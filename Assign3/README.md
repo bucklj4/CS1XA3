@@ -132,8 +132,8 @@ parseExprF "2 + -0.999999999999999"
 
 ## Partial Diffentiation
 The function `partDiff` takes two arguments: 
-(1) A string of the variable to which respect is given
-(2) The expression to be differentiated.
+1. A string of the variable to which respect is given
+2. The expression to be differentiated.
 ```haskell
 partDiff "x" (Div (Const 1) (Var "x"))
 >>> ((val -1.0)) !/ (((var "x")) !* ((var "x")))
@@ -150,14 +150,64 @@ eval (Map.fromList [("x", 2)]) $ partDiff "x" $ parseExprD "1/x"
 >>> -0.25
 ```
 ## Bonus Features
-### Graphing
-The file `Graphing.hs` includes the function `graph` which takes 4 arguments:
-(1) The variable to which respect is given 
-(2) The left value of the domain 
-(3) The right value of the domain 
-(4) The encoded mathematical expression to be plotted
+### Sigma Sum
+The file `ExprBonus.hs` includes the function `sigma` which takes 4 arguments and performs a sigma sum:
+1. The independent variable
+2. The first value of the variable in the sigma sum 
+3. The last value of the variable in the sigma sum 
+4. The encoded mathematical expression to be summed
 
-The function produces an HTML file called graph.HTML in the same directory as `Graphing.hs` that can be opened to reveal the function plotted on its domain in SVG graphics!
+```haskell
+sigma "i" 1 100 $ parseExprD "i"
+>>> (val 5050.0)
+
+sigma "i" 1 100 $ parseExprD "i^2"
+>>> (val 338350.0)
+
+sigma "i" 1 100 $ parseExprD "i + i^2"
+>>> (val 343400.0)
+
+sigma "i" 100 100 $ parseExprD "i^2"
+>>> (val 10000.0)
+
+sigma "i" 100 1 $ parseExprD "i^2"
+>>> (val 0.0)
+```
+### Series Convergence
+The file `ExprBonus.hs` includes the function `isConverging` which takes 3 arguments and tries to determine if a series converges as it the independent variable approaches infinity:
+1. The independent variable
+2. The starting position of the series (ensure this is defined!)
+3. The encoded mathematical expression
+
+```haskell
+isConverging "x" 1 $ parseExprD "1/x"
+>>> False
+
+isConverging "x" 1 $ parseExprD "10^10 / x"
+>>> False
+
+isConverging "x" 1 $ parseExprD "1/x^2"
+>>> True
+
+isConverging "x" 1 $ parseExprD "1/x^1.1"
+>>> True
+
+isConverging "x" 1 $ parseExprD "ln(x)"
+>>> False
+
+isConverging "x" (-1) $ parseExprD "ln(x)"
+>>> *** Exception: Log is undefined on this domain!
+```
+*Note: Determining whether a series converges using this type of computation is an undecidable problem. As such, isConverging only returns True when a series converges faster than the series 1 / x^1.1.*
+
+### Graphing
+The file `ExprGraphing.hs` includes the function `graph` which takes 4 arguments:
+1. The variable to which respect is given 
+2. The left value of the domain 
+3. The right value of the domain 
+4. The encoded mathematical expression to be plotted
+
+The function produces an HTML file called graph.HTML in the same directory as `ExprGraphing.hs` that can be opened to reveal the function plotted on its domain in SVG graphics!
 
 ```haskell 
 graph "x" (-5) (5) $ parseExprD "sin(x)"
