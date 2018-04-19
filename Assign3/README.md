@@ -174,7 +174,7 @@ sigma "i" 100 1 $ parseExprD "i^2"
 >>> (val 0.0)
 ```
 ### Series Convergence
-The file `ExprBonus.hs` includes the function `isConverging` which takes 3 arguments and tries to determine if a series converges as it the independent variable approaches infinity:
+The file `ExprBonus.hs` includes the function `isConverging` which takes 3 arguments and tries to determine if a series converges as the independent variable approaches infinity:
 1. The independent variable
 2. The starting position of the series (ensure this is defined!)
 3. The encoded mathematical expression
@@ -199,6 +199,34 @@ isConverging "x" (-1) $ parseExprD "ln(x)"
 >>> *** Exception: Log is undefined on this domain!
 ```
 *Note: Determining whether a series converges using this type of computation is an undecidable problem. As such, isConverging only returns True when a series converges faster than the series 1 / x^1.1.*
+
+### Integrals
+The file `ExprBonus.hs` includes the function `integral` which takes 5 arguments and returns the value of the integral on a given range using the Trapezoidal Rule:
+1. The variable to which respect is given
+2. The left bound of the integral
+3. The right bound of the integral
+4. The number of trapezoids
+5. The encoded mathematical expression
+
+```haskell
+integral "x" 0 10 20 $ parseExprD "x^2"
+>>> (val 308.75)
+
+integral "x" 0 10 1000 $ parseExprD "x^2"
+>>> (val 333.8334999999903)
+
+integral "x" 0 10 100000 $ parseExprD "x^2"
+>>> (val 333.3383333496896)
+
+integral "x" 10 0 100000 $ parseExprD "x^2"
+>>> (val -333.3383333496896)
+
+integral "x" 10 10 100000 $ parseExprD "x^2"
+>>> (val 0.0)
+
+integral "x" (-10) 10 100 $ parseExprD "x^3"
+>>> (val -5.775291356258095e-12)
+```
 
 ### Graphing
 The file `ExprGraphing.hs` includes the function `graph` which takes 4 arguments:
