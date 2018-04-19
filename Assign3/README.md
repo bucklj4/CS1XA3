@@ -228,6 +228,85 @@ integral "x" (-10) 10 100 $ parseExprD "x^3"
 >>> (val -5.775291356258095e-12)
 ```
 
+### Newton's Method
+The file `ExprBonus.hs` includes the function `newton` which takes 4 arguments and returns an estimate of where a root lies on a function:
+1. The independent variable
+2. The initial guess of where the root is
+3. The maximum recursion limit (how many times to run before giving up)
+4. The encoded mathematical expression
+
+```haskell
+newton "x" 1 100 $ parseExprD "3*x^2 + 4*x - 5"
+>>> (val 0.7862996478468912)
+
+newton "x" 10 100 $ parseExprD "x*e^(x^2)"
+>>> *** Exception: Newton's Method was unable to find a root after the maximum number of iterations allowed using the given initial guess. Please make a more accurate guess or increase the maximum recursion limit and try again.
+
+newton "x" 0 100 $ parseExprD "1/x"
+>>> *** Exception: The denominator equals zero!
+
+newton "x" (-5) 100 $ parseExprD "ln(x)"
+>>> *** Exception: Log is undefined on this domain!
+
+newton "x" 3 100 $ parseExprD "(x-3)^2"
+>>> *** Exception: The deriative at this point is 0!
+```
+
+#### Pure Newton's Method
+The file `ExprBonus.hs` includes the function `pureNewton` which takes the same 4 arguments as `newton`, except returns the solution in a Maybe type, where either a solution is given or Nothing is returned. *Note: basic arithemetic exceptions such as a divide by zero error are still thrown*:
+
+```haskell
+pureNewton "x" 1 100 $ parseExprD "3*x^2 + 4*x - 5"
+>>> Just (val 0.7862996478468912)
+
+pureNewton "x" 10 100 $ parseExprD "x*e^(x^2)"
+>>> Nothing
+
+newton "x" 3 100 $ parseExprD "(x-3)^2"
+>>> Nothing
+```
+
+### Fix Floating Point Error
+The file `ExprBonus.hs` includes the function `fixFloatingError` which takes an encoded constant number and returns the number rounded to six decimal places:
+
+```haskell
+fixFloatingError (Const (-3.0000000000000004))
+>>> (val -3.0)
+```
+
+### Critical Points
+The file `ExprBonus.hs` includes the function `criticalPoints` which takes 4 arguments and returns a list of the defined critical points of a function: *Note: undefined critical points are not returned*
+1. The independent variable
+2. The left value of the domain
+3. The right value of the domain
+4. The encoded mathematical expression
+
+```haskell
+criticalPoints "x" (-20) 20 $ parseExprD "(x-2)^2 + 4"
+>>> [(val 2.0)]
+
+ criticalPoints "x" (-20) 20 $ parseExprD "5*x^3 + 10*(x-3)^2 - 4"
+>>> [(val 1.441518),(val -2.774852)]
+
+criticalPoints "x" (-2*pi) (2*pi) $ parseExprD "sin(x)"
+>>> [(val 4.712389),(val 10.995574),(val 1.570796),(val -1.570796),(val -4.712389)]
+```
+
+### Extrema
+The file `ExprBonus.hs` includes the function `extrema` which takes the same 4 arguments as `criticalPoints` and returns a list of coordinates of the local maxima and minima of a function:
+
+```haskell
+extrema "x" (-20) 20 $ parseExprD "(x-2)^2 + 4"
+>>> [("Local Minimum",(2.0,4.0))]
+
+ extrema "x" (-20) 20 $ parseExprD "5*x^3 + 10*(x-3)^2 - 4"
+>>> [("Local Maximum",(-2.774852,222.660079)),("Local Minimum",(1.441518,35.265847))]
+
+extrema "x" (-2*pi) (2*pi) $ parseExprD "sin(x)"
+>>> [("Local Maximum",(-4.712389,1.0)),("Local Minimum",(-1.570796,-1.0)),("Local Maximum",(1.570796,1.0)),("Local Minimum",(10.995574,-1.0)),("Local Minimum",(4.712389,-1.0))]
+```
+
+
 ### Graphing
 The file `ExprGraphing.hs` includes the function `graph` which takes 4 arguments:
 1. The variable to which respect is given 
