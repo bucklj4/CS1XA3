@@ -130,7 +130,7 @@ parseExprF "2 + -0.999999999999999"
 >>> ((val 2.0)) !+ ((val -1.0))
 ```
 
-## Partial Diffentiation
+## Partial Differentiation
 The function `partDiff` takes two arguments: 
 1. A string of the variable to which respect is given
 2. The expression to be differentiated.
