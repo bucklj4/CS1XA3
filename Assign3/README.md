@@ -2,6 +2,9 @@
 
 This is a custom math library written in Haskell that can be used to encode mathematical expressions so that they can be simplified, evaluated, or even partially differentiated. The library also includes some handy tools for all your calculus midterm studying needs! 
 
+## Haddock
+You can view the Haddock documentation here: http://ugweb.cas.mcmaster.ca/~bucklj4/haddock/index.html
+
 ## Getting Started
 You'll find the different aspects of the math library split up into neatly contained modules. These include: ```ExprType.hs``` for the skeleton of mathematical expressions, ```ExprDiff.hs``` for the nitty-gritty of the mathematical functions, ```ExprParser.hs``` for parsing strings into mathematical expressions that can be operated on by the library, and ```ExprTest.hs``` for testing of the mathematical library.
 
@@ -347,7 +350,7 @@ Likewise, this code yields:
 
 ## Versioning
 
-*In development*
+Version 1.0.0
 
 ## Authors
 
@@ -355,11 +358,13 @@ Likewise, this code yields:
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details. Please reference if you use snippets of code.
 
 ## Acknowledgments
 
 * [Jake Wheat's Intro to Parsing](https://jakewheat.github.io/intro_to_parsing/)
-* [Curtis D'Alves's skeleton files](http://www.cas.mcmaster.ca/~dalvescb/#outline-container-orga8f4fcc)
+* [Curtis D'Alves's Skeleton Files](http://www.cas.mcmaster.ca/~dalvescb/#outline-container-orga8f4fcc)
 * [Luqui's Unsafe Cleanup](https://stackoverflow.com/questions/4243117/how-to-catch-and-ignore-a-call-to-the-error-function)
 * [Haskell-Chart](https://github.com/timbod7/haskell-chart)
+* [Agal's Rounder](https://stackoverflow.com/questions/12450501/round-number-to-specified-number-of-digits)
+* Dr. William Farmer's 1JC3 Material, including exposure to Newton's Method and the Trapezoidal Rule to calculate integrals
