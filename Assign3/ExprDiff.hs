@@ -94,48 +94,48 @@ instance (Num a, Eq a, Fractional a, Floating a, Ord a, Show a, RealFrac a) => D
 
 
   -- The base case for simplify
-  simplify p (Const x) = (Const x)
+  simplify vrs (Const x) = (Const x)
 
   -- We do not all variables to be substituted in simplify, but we can substitute what we are given
-  simplify p (Var x) = case Map.lookup x p of
+  simplify vrs (Var x) = case Map.lookup x vrs of
                        Just v  -> (Const v)
                        Nothing -> (Var x)
 
   -- Defining how we shoud simplify addition expressions
-  simplify p (Add a b) =
-    case (simplify p a, simplify p b) of
+  simplify vrs (Add a b) =
+    case (simplify vrs a, simplify vrs b) of
       -- Adding zero to anything does nothing, so just continue simplifying the rest of the expression
-      (Const 0, x) -> simplify p x
-      (x, Const 0) -> simplify p x
+      (Const 0, x) -> simplify vrs x
+      (x, Const 0) -> simplify vrs x
 
       -- Standard addition of two numbers
       (Const x, Const y) -> Const (x+y)
 
       -- We can't really do much to variables added to constants
-      (Const x, Var y) -> (Add (simplify p (Var y)) (Const x))
-      (Var y, Const x) -> (Add (simplify p (Var y)) (Const x))
+      (Const x, Var y) -> (Add (simplify vrs (Var y)) (Const x))
+      (Var y, Const x) -> (Add (simplify vrs (Var y)) (Const x))
 
       -- Collecting like terms
-      (Var a, Mult (Const b) (Var c)) -> if a == c then (Mult (Const (b+1)) (simplify p (Var a))) else (Add (simplify p (Var a)) (Mult (Const b) (simplify p (Var c))))
-      (Mult (Const b) (Var c), Var a) -> if a == c then (Mult (Const (b+1)) (simplify p (Var a))) else (Add (simplify p (Var a)) (Mult (Const b) (simplify p (Var c))))
+      (Var a, Mult (Const b) (Var c)) -> if a == c then (Mult (Const (b+1)) (simplify vrs (Var a))) else (Add (simplify vrs (Var a)) (Mult (Const b) (simplify vrs (Var c))))
+      (Mult (Const b) (Var c), Var a) -> if a == c then (Mult (Const (b+1)) (simplify vrs (Var a))) else (Add (simplify vrs (Var a)) (Mult (Const b) (simplify vrs (Var c))))
 
       -- To simplify as best as we can, we move any constants to the right of the expression so they can be grouped together
-      (Const x, Add (Const y) z) -> simplify p (Add (simplify p z) (Const (x+y)))
-      (Const x, Add z (Const y)) -> simplify p (Add (simplify p z) (Const (x+y)))
-      (Add (Const y) z, Const x) -> simplify p (Add (simplify p z) (Const (x+y)))
-      (Add z (Const y), Const x) -> simplify p (Add (simplify p z) (Const (x+y)))
-      (Add (Const a) (Var b), d) -> (Add (simplify p (Add (simplify p (Var b)) (simplify p d))) (Const a))
-      (Add (Var b) (Const a), d) -> (Add (simplify p (Add (simplify p (Var b)) (simplify p d))) (Const a))
-      (d, Add (Const a) (Var b)) -> (Add (simplify p (Add (simplify p (Var b)) (simplify p d))) (Const a))
-      (d, Add (Var b) (Const a)) -> (Add (simplify p (Add (simplify p (Var b)) (simplify p d))) (Const a))
+      (Const x, Add (Const y) z) -> simplify vrs (Add (simplify vrs z) (Const (x+y)))
+      (Const x, Add z (Const y)) -> simplify vrs (Add (simplify vrs z) (Const (x+y)))
+      (Add (Const y) z, Const x) -> simplify vrs (Add (simplify vrs z) (Const (x+y)))
+      (Add z (Const y), Const x) -> simplify vrs (Add (simplify vrs z) (Const (x+y)))
+      (Add (Const a) (Var b), d) -> (Add (simplify vrs (Add (simplify vrs (Var b)) (simplify vrs d))) (Const a))
+      (Add (Var b) (Const a), d) -> (Add (simplify vrs (Add (simplify vrs (Var b)) (simplify vrs d))) (Const a))
+      (d, Add (Const a) (Var b)) -> (Add (simplify vrs (Add (simplify vrs (Var b)) (simplify vrs d))) (Const a))
+      (d, Add (Var b) (Const a)) -> (Add (simplify vrs (Add (simplify vrs (Var b)) (simplify vrs d))) (Const a))
 
       -- Collecting like terms on variables
-      (Var a, Add (Var b) (Var c)) -> if a == b then (Add (Mult (Const 2) (simplify p (Var a))) (simplify p (Var c))) else if a == c then (Add (Mult (Const 2) (simplify p (Var a))) (simplify p (Var b))) else (Add (simplify p (Var a)) (Add (simplify p (Var b)) (simplify p (Var c))))
-      (Var a, Add (Var b) c) -> if a == b then (Add (Mult (Const 2) (simplify p (Var a))) (simplify p c)) else (Add (simplify p (Var a)) (Add (simplify p (Var b)) (simplify p c)))
-      (Var a, Add c (Var b)) -> if a == b then (Add (Mult (Const 2) (simplify p (Var a))) (simplify p c)) else (Add (simplify p (Var a)) (Add (simplify p (Var b)) (simplify p c)))
-      (Add (Var b) c, Var a) -> if a == b then (Add (Mult (Const 2) (simplify p (Var a))) (simplify p c)) else (Add (simplify p (Var a)) (Add (simplify p (Var b)) (simplify p c)))
-      (Add c (Var b), Var a) -> if a == b then (Add (Mult (Const 2) (simplify p (Var a))) (simplify p c)) else (Add (simplify p (Var a)) (Add (simplify p (Var b)) (simplify p c)))  
-      (Var a, Var b) -> if a == b then (Mult (Const 2) ((simplify p (Var a)))) else (Add (simplify p (Var a)) (simplify p (Var b)))
+      (Var a, Add (Var b) (Var c)) -> if a == b then (Add (Mult (Const 2) (simplify vrs (Var a))) (simplify vrs (Var c))) else if a == c then (Add (Mult (Const 2) (simplify vrs (Var a))) (simplify vrs (Var b))) else (Add (simplify vrs (Var a)) (Add (simplify vrs (Var b)) (simplify vrs (Var c))))
+      (Var a, Add (Var b) c) -> if a == b then (Add (Mult (Const 2) (simplify vrs (Var a))) (simplify vrs c)) else (Add (simplify vrs (Var a)) (Add (simplify vrs (Var b)) (simplify vrs c)))
+      (Var a, Add c (Var b)) -> if a == b then (Add (Mult (Const 2) (simplify vrs (Var a))) (simplify vrs c)) else (Add (simplify vrs (Var a)) (Add (simplify vrs (Var b)) (simplify vrs c)))
+      (Add (Var b) c, Var a) -> if a == b then (Add (Mult (Const 2) (simplify vrs (Var a))) (simplify vrs c)) else (Add (simplify vrs (Var a)) (Add (simplify vrs (Var b)) (simplify vrs c)))
+      (Add c (Var b), Var a) -> if a == b then (Add (Mult (Const 2) (simplify vrs (Var a))) (simplify vrs c)) else (Add (simplify vrs (Var a)) (Add (simplify vrs (Var b)) (simplify vrs c)))  
+      (Var a, Var b) -> if a == b then (Mult (Const 2) ((simplify vrs (Var a)))) else (Add (simplify vrs (Var a)) (simplify vrs (Var b)))
 
       -- Worst case scenario in which we can't do anything: leave it as is
       (x, y) -> (Add x y)
@@ -144,36 +144,36 @@ instance (Num a, Eq a, Fractional a, Floating a, Ord a, Show a, RealFrac a) => D
 
 
   -- Defining how we shoud simplify multiplication expressions
-  simplify p (Mult a b) =
-    case (simplify p a, simplify p b) of
+  simplify vrs (Mult a b) =
+    case (simplify vrs a, simplify vrs b) of
       -- Anything times zero is zero
       (Const 0, y) -> (Const 0)
       (y, Const 0) -> (Const 0)
 
       --Anything times one is itself
-      (Const 1, y) -> (simplify p y)
-      (y, Const 1) -> (simplify p y)
+      (Const 1, y) -> (simplify vrs y)
+      (y, Const 1) -> (simplify vrs y)
 
       -- Standard multiplication of two numbers
       (Const x, Const y) -> Const (x*y)
 
       -- To simplify as best as we can, we move any constants to the right of the expression so they can be grouped together
-      (Const x, Mult (Const y) z) -> simplify p (Mult (simplify p z) (Const (x*y)))
-      (Const x, Mult z (Const y)) -> simplify p (Mult (simplify p z) (Const (x*y)))
-      (Mult (Const y) z, Const x) -> simplify p (Mult (simplify p z) (Const (x*y)))
-      (Mult z (Const y), Const x) -> simplify p (Mult (simplify p z) (Const (x*y)))
-      (Mult (Const a) (Var b), d) -> (Mult (simplify p (Mult (Var b) (simplify p d))) (Const a))
-      (Mult (Var b) (Const a), d) -> (Mult (simplify p (Mult (Var b) (simplify p d))) (Const a))
-      (d, Mult (Const a) (Var b)) -> (Mult (simplify p (Mult (Var b) (simplify p d))) (Const a))
-      (d, Mult (Var b) (Const a)) -> (Mult (simplify p (Mult (Var b) (simplify p d))) (Const a))
+      (Const x, Mult (Const y) z) -> simplify vrs (Mult (simplify vrs z) (Const (x*y)))
+      (Const x, Mult z (Const y)) -> simplify vrs (Mult (simplify vrs z) (Const (x*y)))
+      (Mult (Const y) z, Const x) -> simplify vrs (Mult (simplify vrs z) (Const (x*y)))
+      (Mult z (Const y), Const x) -> simplify vrs (Mult (simplify vrs z) (Const (x*y)))
+      (Mult (Const a) (Var b), d) -> (Mult (simplify vrs (Mult (Var b) (simplify vrs d))) (Const a))
+      (Mult (Var b) (Const a), d) -> (Mult (simplify vrs (Mult (Var b) (simplify vrs d))) (Const a))
+      (d, Mult (Const a) (Var b)) -> (Mult (simplify vrs (Mult (Var b) (simplify vrs d))) (Const a))
+      (d, Mult (Var b) (Const a)) -> (Mult (simplify vrs (Mult (Var b) (simplify vrs d))) (Const a))
 
       -- Worst case scenario in which we can't do anything: leave it as is
       (x, y) -> (Mult x y)
 
 
   -- We cannot do much simplification to division statements because of their complexity
-  simplify p (Div a b) =
-    case (simplify p a, simplify p b) of
+  simplify vrs (Div a b) =
+    case (simplify vrs a, simplify vrs b) of
       -- Zero divided by anything is 0
       (Const 0, y) -> (Const 0)
 
@@ -188,40 +188,40 @@ instance (Num a, Eq a, Fractional a, Floating a, Ord a, Show a, RealFrac a) => D
       (x, y) -> (Div x y)
 
   -- If we have a number, we can find the cosine of it; if we have a variable, we leave it as is; otherwise, we can only simplify inside the cosine function     
-  simplify p (Cos (Const a)) = (Const (cos(a)))
-  simplify p (Cos (Var a)) = (Cos (Var a))
-  simplify p (Cos a) = (Cos (simplify p a))
+  simplify vrs (Cos (Const a)) = (Const (cos(a)))
+  simplify vrs (Cos (Var a)) = (Cos (Var a))
+  simplify vrs (Cos a) = (Cos (simplify vrs a))
 
   -- If we have a number, we can find the sine of it; if we have a variable, we leave it as is; otherwise, we can only simplify inside the sine function    
-  simplify p (Sin (Const a)) = (Const (sin(a)))
-  simplify p (Sin (Var a)) = (Sin (Var a))
-  simplify p (Sin a) = (Sin (simplify p a))
+  simplify vrs (Sin (Const a)) = (Const (sin(a)))
+  simplify vrs (Sin (Var a)) = (Sin (Var a))
+  simplify vrs (Sin a) = (Sin (simplify vrs a))
 
   -- If we have a number, we can find the natural log of it; if we have a variable, we leave it as is; if we have the natural exponential, we cancel it; otherwise, we can only simplify inside the natural log function  
-  simplify p (Log (Const a)) = if a > 0 then (Const (log(a))) else error "Log is undefined on this domain!"
-  simplify p (Log (Var a)) = (Log (Var a))
-  simplify p (Log (Exp a)) = simplify p (Exp a)
-  simplify p (Log a) = (Log (simplify p a))
+  simplify vrs (Log (Const a)) = if a > 0 then (Const (log(a))) else error "Log is undefined on this domain!"
+  simplify vrs (Log (Var a)) = (Log (Var a))
+  simplify vrs (Log (Exp a)) = simplify vrs (Exp a)
+  simplify vrs (Log a) = (Log (simplify vrs a))
 
   -- If we have a number, we can find the sine of it; if we have a variable, we leave it as is; otherwise, we can only simplify inside the sine function  
-  simplify p (Exp (Const a)) = (Const (exp(a)))
-  simplify p (Exp (Var a)) = (Exp (Var a))
-  simplify p (Exp a) = (Exp (simplify p a))
+  simplify vrs (Exp (Const a)) = (Const (exp(a)))
+  simplify vrs (Exp (Var a)) = (Exp (Var a))
+  simplify vrs (Exp a) = (Exp (simplify vrs a))
 
   -- We're just going to convert a subtaction expression into an addition expression
-  simplify p (Subtr a b) = simplify p (Add (simplify p a) (simplify p (Mult (Const (-1)) b)))
+  simplify vrs (Subtr a b) = simplify vrs (Add (simplify vrs a) (simplify vrs (Mult (Const (-1)) b)))
 
   -- Parentheses don't do much
-  simplify p (Parens a) = simplify p a
+  simplify vrs (Parens a) = simplify vrs a
 
   -- Powers reduce to repeated multiplication
-  simplify p (Power a (Const 0)) = (Const 1)
-  simplify p (Power a (Const 1)) = reduce $ simplify p a
-  simplify p (Power a (Const k)) = if k > 0 && isInt k then reduce $ (Mult (simplify p a) (simplify p (Power (simplify p a) (Const (k-1))))) else if k < 0 && isInt k then reduce $ simplify p (Div (Const 1) (Power (simplify p a) (Const (abs(k))))) else reduce $ simplify p (Exp (Mult (Const k) (Log (simplify p a))))
-  simplify p (Power a b) = reduce $ simplify p (Exp (Mult (simplify p b) (Log (simplify p a))))
+  simplify vrs (Power a (Const 0)) = (Const 1)
+  simplify vrs (Power a (Const 1)) = reduce $ simplify vrs a
+  simplify vrs (Power a (Const k)) = if k > 0 && isInt k then reduce $ (Mult (simplify vrs a) (simplify vrs (Power (simplify vrs a) (Const (k-1))))) else if k < 0 && isInt k then reduce $ simplify vrs (Div (Const 1) (Power (simplify vrs a) (Const (abs(k))))) else reduce $ simplify vrs (Exp (Mult (Const k) (Log (simplify vrs a))))
+  simplify vrs (Power a b) = reduce $ simplify vrs (Exp (Mult (simplify vrs b) (Log (simplify vrs a))))
 
   -- Tangents can be reduced to ratios of sine to cosine
-  simplify p (Tan a) = reduce $ simplify p (Div (Sin (simplify p a)) (Cos (simplify p a)))
+  simplify vrs (Tan a) = reduce $ simplify vrs (Div (Sin (simplify vrs a)) (Cos (simplify vrs a)))
 
 
 
