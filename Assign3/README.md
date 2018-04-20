@@ -6,16 +6,11 @@ This is a custom math library written in Haskell that can be used to encode math
 You'll find the different aspects of the math library split up into neatly contained modules. These include: ```ExprType.hs``` for the skeleton of mathematical expressions, ```ExprDiff.hs``` for the nitty-gritty of the mathematical functions, ```ExprParser.hs``` for parsing strings into mathematical expressions that can be operated on by the library, and ```ExprTest.hs``` for testing of the mathematical library.
 
 ### Prerequisites
-
-What things you need to install the software and how to install them
-
+*Note: This install is optional. You only need to run the following command should you wish to use the library's graphing feature.
 ```
-TBA
+cabal update
+cabal install chart-diagrams
 ```
-
-### Installing
-
-TBA
 
 ## Mathematical Expressions
 
@@ -130,7 +125,7 @@ parseExprF "2 + -0.999999999999999"
 >>> ((val 2.0)) !+ ((val -1.0))
 ```
 
-## Partial Diffentiation
+## Partial Differentiation
 The function `partDiff` takes two arguments: 
 1. A string of the variable to which respect is given
 2. The expression to be differentiated.
@@ -150,6 +145,18 @@ eval (Map.fromList [("x", 2)]) $ partDiff "x" $ parseExprD "1/x"
 >>> -0.25
 ```
 ## Bonus Features
+### Pure Eval and Pure Simplify
+The file `ExprBonus.hs` includes the functions `pureEval` and `pureSimplify` which take the same 4 arguments as `eval` and  `simplify` except returns results in a Maybe type where either a result or Nothing is given
+```haskell
+pureEval (Map.fromList [("x", 5)]) ((Var "x")  !+ (Var "y") !+ (Const 2) !+ (Const 3))
+>>> Nothing
+
+pureSimplify (Map.fromList [("x", 5)]) (((Const 5) !* (Const 5)) !/ (Const 0))
+>>> Nothing
+
+pureSimplify (Map.fromList [("x", 5)]) (((Const 5) !* (Const 5)) !/ (Const 5))
+>>> Just (val 5.0)
+```
 ### Sigma Sum
 The file `ExprBonus.hs` includes the function `sigma` which takes 4 arguments and performs a sigma sum:
 1. The independent variable
@@ -253,7 +260,7 @@ newton "x" 3 100 $ parseExprD "(x-3)^2"
 ```
 
 #### Pure Newton's Method
-The file `ExprBonus.hs` includes the function `pureNewton` which takes the same 4 arguments as `newton`, except returns the solution in a Maybe type, where either a solution is given or Nothing is returned. *Note: basic arithemetic exceptions such as a divide by zero error are still thrown*:
+The file `ExprBonus.hs` includes the function `pureNewton` which takes the same 4 arguments as `newton`, except returns the solution in a Maybe type, where either a solution is given or Nothing is returned.
 
 ```haskell
 pureNewton "x" 1 100 $ parseExprD "3*x^2 + 4*x - 5"
@@ -262,7 +269,13 @@ pureNewton "x" 1 100 $ parseExprD "3*x^2 + 4*x - 5"
 pureNewton "x" 10 100 $ parseExprD "x*e^(x^2)"
 >>> Nothing
 
-newton "x" 3 100 $ parseExprD "(x-3)^2"
+pureNewton "x" 0 100 $ parseExprD "1/x"
+>>> Nothing
+
+pureNewton "x" 10 100 $ parseExprD "x*e^(x^2)"
+>>> Nothing
+
+pureNewton "x" 3 100 $ parseExprD "(x-3)^2"
 >>> Nothing
 ```
 
@@ -334,7 +347,7 @@ Likewise, this code yields:
 
 ## Versioning
 
-TBA
+*In development*
 
 ## Authors
 
@@ -348,3 +361,5 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 * [Jake Wheat's Intro to Parsing](https://jakewheat.github.io/intro_to_parsing/)
 * [Curtis D'Alves's skeleton files](http://www.cas.mcmaster.ca/~dalvescb/#outline-container-orga8f4fcc)
+* [Luqui's Unsafe Cleanup](https://stackoverflow.com/questions/4243117/how-to-catch-and-ignore-a-call-to-the-error-function)
+* [Haskell-Chart](https://github.com/timbod7/haskell-chart)
